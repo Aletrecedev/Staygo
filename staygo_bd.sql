@@ -1,5 +1,3 @@
-CREATE DATABASE IF NOT EXISTS staygo_db;
-USE staygo_db;
 
 -- Tabla 1: Usuario
 CREATE TABLE usuarios (
