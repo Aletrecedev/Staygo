@@ -10,7 +10,7 @@ CREATE TABLE usuarios (
                           email VARCHAR(100) UNIQUE NOT NULL,
                           contrasena VARCHAR(255) NOT NULL,
                           nombre_usuario VARCHAR(50) UNIQUE,
-                          rol ENUM('ADMIN', 'PROPIETARIO', 'CLIENTE') NOT NULL -- Para diferenciar tipos de usuario
+                          rol ENUM('ADMIN', 'PROPIETARIO', 'CLIENTE') NOT NULL
 );
 
 -- Tabla 2: Propietario
@@ -45,9 +45,9 @@ CREATE TABLE reservas (
                           fecha_inicio DATE NOT NULL,
                           fecha_fin DATE NOT NULL,
                           importe_total DECIMAL(10, 2) NOT NULL,
-                          estado VARCHAR(50) DEFAULT 'PENDIENTE', -- [cite: 87]
-                          valoracion_huesped VARCHAR(255), -- [cite: 89]
-                          valoracion_propietario VARCHAR(255), -- [cite: 90]
+                          estado VARCHAR(50) DEFAULT 'PENDIENTE',
+                          valoracion_huesped VARCHAR(255),
+                          valoracion_propietario VARCHAR(255),
                           id_apartamento INT NOT NULL,
                           id_cliente INT NOT NULL,
                           FOREIGN KEY (id_apartamento) REFERENCES apartamentos(id_apartamento),
@@ -57,8 +57,8 @@ CREATE TABLE reservas (
 -- Tabla 6: Pago
 CREATE TABLE pagos (
                        id_pago INT AUTO_INCREMENT PRIMARY KEY,
-                       fecha_pago DATETIME DEFAULT CURRENT_TIMESTAMP, -- [cite: 133]
-                       metodo_pago VARCHAR(50), -- [cite: 134]
+                       fecha_pago DATETIME DEFAULT CURRENT_TIMESTAMP,
+                       metodo_pago VARCHAR(50),
                        id_reserva INT NOT NULL,
                        FOREIGN KEY (id_reserva) REFERENCES reservas(id_reserva)
 );
