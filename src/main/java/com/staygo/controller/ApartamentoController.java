@@ -59,4 +59,12 @@ public class ApartamentoController {
         model.addAttribute("apartamento", apartamento);
         return "formulario_apartamento";
     }
+
+    // Vista para clientes
+    @GetMapping("/explorar")
+    public String explorarApartamentos(Model model) {
+        List<Apartamento> lista = apartamentoService.obtenerTodos();
+        model.addAttribute("apartamentos", lista);
+        return "explorar";
+    }
 }
