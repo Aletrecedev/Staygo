@@ -2,52 +2,112 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>StayGO - Alojamientos</title>
+    <title>StayGO - Mis Alojamientos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="bg-light">
 
-<nav class="navbar navbar-dark bg-primary mb-4">
+<nav class="navbar navbar-expand-lg navbar-custom sticky-top">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="/">StayGO</a>
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <i class="bi bi-house-door-fill text-primary fs-3 me-2"></i>
+            <span class="navbar-brand-text">StayGO</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center gap-3">
+                <li class="nav-item d-none d-lg-block">
+                    <a class="nav-link text-dark" href="#" title="Idioma"><i class="bi bi-globe fs-5"></i></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <div class="profile-pill d-flex align-items-center gap-2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-list fs-5 text-dark"></i>
+                        <i class="bi bi-person-circle fs-4 text-primary" th:unless="${session.usuarioLogueado == null}"></i>
+                        <i class="bi bi-person-circle fs-4 text-secondary" th:if="${session.usuarioLogueado == null}"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2">
+                        <th:block th:if="${session.usuarioLogueado == null}">
+                            <li><a class="dropdown-item fw-bold py-2" th:href="@{/registro}">Regístrate</a></li>
+                            <li><a class="dropdown-item py-2" th:href="@{/login}">Inicia sesión</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                        </th:block>
+                        <th:block th:unless="${session.usuarioLogueado == null}">
+                            <li class="px-3 py-2 text-muted small">
+                                ¡Hola, <span class="fw-bold text-dark" th:text="${session.usuarioLogueado.nombre}">Usuario</span>!
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item fw-bold text-dark bg-light py-2" th:href="@{/apartamentos}">🏠 Panel Propietario</a></li>
+                        </th:block>
+                        <li><a class="dropdown-item py-2" th:href="@{/explorar}">Ver alojamientos</a></li>
+                        <th:block th:unless="${session.usuarioLogueado == null}">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item py-2 text-danger fw-bold" th:href="@{/logout}">Cerrar sesión</a></li>
+                        </th:block>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Apartamentos Disponibles</h2>
-        <a th:href="@{/apartamentos/nuevo}" class="btn btn-success">+ Añadir Alojamiento</a>
+<div class="container mt-5 mb-5">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h2 class="fw-bold mb-0">Mis Alojamientos</h2>
+            <p class="text-muted mb-0">Gestiona tus propiedades publicadas en StayGO.</p>
+        </div>
+        <a th:href="@{/apartamentos/nuevo}" class="btn btn-primary fw-bold rounded-pill px-4 py-2 shadow-sm">
+            <i class="bi bi-plus-lg me-1"></i> Añadir Alojamiento
+        </a>
     </div>
 
-    <div class="row">
-        <div class="col-md-4 mb-4" th:each="apartamento : ${apartamentos}">
-            <div class="card h-100 shadow-sm">
+    <div class="row g-4">
+        <div class="col-md-4" th:each="apartamento : ${apartamentos}">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+
+                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Apartamento" style="height: 200px; object-fit: cover;">
+
                 <div class="card-body">
-                    <h5 class="card-title text-primary" th:text="${apartamento.nombre}">Nombre</h5>
-                    <p class="text-muted small" th:text="${apartamento.direccion}">Ubicación</p>
-                    <p class="card-text" th:text="${apartamento.descripcion}">Descripción</p>
-                    <hr>
-                    <ul class="list-unstyled">
-                        <li><strong>Capacidad:</strong> <span th:text="${apartamento.capacidad}"></span> huéspedes</li>
-                        <li><strong>Precio:</strong> $<span th:text="${apartamento.precioNoche}"></span> / noche</li>
-                    </ul>
-                    <a th:href="@{/apartamentos/editar/{id}(id=${apartamento.idApartamento})}" class="btn btn-outline-primary w-100">Editar</a>
+                    <h5 class="card-title fw-bold mb-1" th:text="${apartamento.nombre}">Nombre</h5>
+                    <p class="text-muted small mb-2"><i class="bi bi-geo-alt me-1"></i> <span th:text="${apartamento.direccion}">Ubicación</span></p>
+                    <p class="card-text text-truncate small text-secondary" th:text="${apartamento.descripcion}">Descripción...</p>
+
+                    <hr class="text-muted opacity-25">
+
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold fs-5 text-primary">€<span th:text="${apartamento.precioNoche}"></span><span class="text-muted small fs-6 fw-normal"> / noche</span></span>
+                        <span class="badge bg-light text-dark border"><i class="bi bi-people me-1"></i> <span th:text="${apartamento.capacidad}"></span> máx</span>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-white border-top-0 pb-3 pt-0 d-flex gap-2">
+                    <a th:href="@{/apartamentos/editar/{id}(id=${apartamento.idApartamento})}" class="btn btn-outline-primary w-50 fw-bold rounded-pill">
+                        <i class="bi bi-pencil me-1"></i> Editar
+                    </a>
                     <a th:href="@{/apartamentos/borrar/{id}(id=${apartamento.idApartamento})}"
-                       class="btn btn-outline-danger w-100 mt-2"
-                       onclick="return confirm('¿Seguro que quieres borrar este alojamiento?')">
-                        Borrar
+                       class="btn btn-outline-danger w-50 fw-bold rounded-pill"
+                       onclick="return confirm('¿Estás seguro de que quieres eliminar esta propiedad de forma permanente?')">
+                        <i class="bi bi-trash me-1"></i> Borrar
                     </a>
                 </div>
+
             </div>
         </div>
     </div>
 
-    <div class="mt-4">
-        <a href="/" class="btn btn-secondary">Volver al inicio</a>
+    <div th:if="${#lists.isEmpty(apartamentos)}" class="text-center py-5">
+        <i class="bi bi-house-add text-muted" style="font-size: 4rem;"></i>
+        <h4 class="mt-3 text-secondary">Aún no tienes propiedades</h4>
+        <p class="text-muted">Anímate a publicar tu primer alojamiento en StayGO.</p>
     </div>
-
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

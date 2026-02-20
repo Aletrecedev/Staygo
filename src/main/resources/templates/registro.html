@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>StayGO - Regístrate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container justify-content-center">
+        <a class="navbar-brand d-flex align-items-center m-0" href="/">
+            <i class="bi bi-house-door-fill text-primary fs-3 me-2"></i>
+            <span class="navbar-brand-text">StayGO</span>
+        </a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="form-container">
+        <h3 class="fw-bold mb-4 text-center">Crea tu cuenta</h3>
+
+        <form th:action="@{/registro}" th:object="${usuario}" method="post">
+
+            <div class="mb-4 p-3 bg-light rounded-3 border">
+                <label class="form-label fw-bold small mb-2">¿Cómo quieres usar StayGO?</label>
+                <select class="form-select p-2 fw-bold text-primary" th:field="*{rol}">
+                    <option value="CLIENTE" selected> Soy Huésped (Quiero buscar alojamiento)</option>
+                    <option value="PROPIETARIO"> Soy Anfitrión (Quiero publicar mi alojamiento)</option>
+                </select>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold small">Nombre</label>
+                    <input type="text" class="form-control p-2" th:field="*{nombre}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold small">Apellidos</label>
+                    <input type="text" class="form-control p-2" th:field="*{apellidos}" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Nombre de Usuario</label>
+                <input type="text" class="form-control p-2" th:field="*{nombreUsuario}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Correo electrónico</label>
+                <input type="email" class="form-control p-2" th:field="*{email}" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold small">Contraseña</label>
+                <input type="password" class="form-control p-2" th:field="*{contrasena}" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 fw-bold py-2 rounded-pill">Registrarse</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <p class="text-muted small">¿Ya tienes una cuenta? <a th:href="@{/login}" class="fw-bold text-primary text-decoration-none">Inicia sesión</a></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
