@@ -23,4 +23,9 @@ public class ApartamentoService {
     public void borrar(Integer id) {
         apartamentoRepository.deleteById(id);
     }
+
+    public Apartamento obtenerPorId(Integer id) {
+        // Buscar apartamento por id. Si no lo encuentra, devuelve null
+        return apartamentoRepository.findById(id).orElse(null);
+    }
 }

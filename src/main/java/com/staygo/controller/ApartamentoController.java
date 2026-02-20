@@ -51,4 +51,12 @@ public class ApartamentoController {
         apartamentoService.borrar(id);
         return "redirect:/apartamentos";
     }
+
+    // Mostrar el formulario pero con los datos prerellenados
+    @GetMapping("/apartamentos/editar/{id}")
+    public String mostrarFormularioDeEditar(@PathVariable Integer id, Model model) {
+        Apartamento apartamento = apartamentoService.obtenerPorId(id);
+        model.addAttribute("apartamento", apartamento);
+        return "formulario_apartamento";
+    }
 }
