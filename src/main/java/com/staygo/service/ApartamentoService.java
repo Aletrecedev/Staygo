@@ -19,4 +19,8 @@ public class ApartamentoService {
     public void guardar(Apartamento apartamento) {
         apartamentoRepository.save(apartamento);
     }
+
+    public void borrar(Integer id) {
+        apartamentoRepository.deleteById(id);
+    }
 }

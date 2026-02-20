@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @Controller
@@ -41,6 +42,13 @@ public class ApartamentoController {
         // Asignar el apartamento temporalmente a id1 para que no dé error.
         apartamento.setIdPropietario(1);
         apartamentoService.guardar(apartamento);
+        return "redirect:/apartamentos";
+    }
+
+    //Para borrar el apartamento por su ID
+    @GetMapping("/apartamentos/borrar/{id}")
+    public String borrarApartamento(@PathVariable Integer id) {
+        apartamentoService.borrar(id);
         return "redirect:/apartamentos";
     }
 }

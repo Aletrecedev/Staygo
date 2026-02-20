@@ -32,6 +32,11 @@
                         <li><strong>Precio:</strong> $<span th:text="${apartamento.precioNoche}"></span> / noche</li>
                     </ul>
                     <a href="#" class="btn btn-outline-primary w-100">Ver Detalles</a>
+                    <a th:href="@{/apartamentos/borrar/{id}(id=${apartamento.idApartamento})}"
+                       class="btn btn-outline-danger w-100 mt-2"
+                       onclick="return confirm('¿Seguro que quieres borrar este alojamiento?')">
+                        Borrar
+                    </a>
                 </div>
             </div>
         </div>
