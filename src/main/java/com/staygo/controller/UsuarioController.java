@@ -4,6 +4,7 @@ import com.staygo.model.Usuario;
 import com.staygo.repository.UsuarioRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,8 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // Registro
     @GetMapping("/registro")
@@ -26,29 +29,38 @@ public class UsuarioController {
 
     @PostMapping("/registro")
     public String procesarRegistro(@ModelAttribute Usuario usuario) {
+        // Encriptar la contraseña
+        String contrasenaEncriptada = passwordEncoder.encode(usuario.getContrasena());
+        usuario.setContrasena(contrasenaEncriptada);
+
         usuarioRepository.save(usuario);
         return "redirect:/login";
     }
 
-    // Login
+    // --- LOGIN ---
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
     }
 
-    // Procesar los datos del login
     @PostMapping("/login")
     public String procesarLogin(@RequestParam String email,
                                 @RequestParam String contrasena,
                                 HttpSession session,
                                 Model model) {
 
-        Usuario usuario = usuarioRepository.findByEmailAndContrasena(email, contrasena);
+        // 1. Buscar si existe alguien con ese email
+        Usuario usuario = usuarioRepository.findByEmail(email);
 
-        if (usuario != null) {
+        // 2. Si el usuario existe, comprobar si la contraseña coincide con la encriptada
+        if (usuario != null && passwordEncoder.matches(contrasena, usuario.getContrasena())) {
+
+            // Éxito
             session.setAttribute("usuarioLogueado", usuario);
             return "redirect:/explorar";
+
         } else {
+            // Error (O no existe el email, o la contraseña está mal)
             model.addAttribute("error", "Email o contraseña incorrectos. Inténtalo de nuevo.");
             return "login";
         }

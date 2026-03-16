@@ -1,14 +1,13 @@
 package com.staygo.controller;
 
 import com.staygo.model.Apartamento;
+import com.staygo.repository.ApartamentoRepository;
 import com.staygo.service.ApartamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @Controller
@@ -16,16 +15,15 @@ public class ApartamentoController {
 
     @Autowired
     private ApartamentoService apartamentoService;
+    @Autowired
+    private ApartamentoRepository apartamentoRepository;
 
     @GetMapping("/apartamentos")
     public String listarApartamentos(Model model) {
-        // Lista de apartamentos
         List<Apartamento> lista = apartamentoService.obtenerTodos();
 
-        // Se la pasamos al HTML bajo el nombre "apartamentos"
         model.addAttribute("apartamentos", lista);
 
-        // Devolvemos el nombre del archivo HTML
         return "lista_apartamentos";
     }
 
@@ -65,6 +63,22 @@ public class ApartamentoController {
     public String explorarApartamentos(Model model) {
         List<Apartamento> lista = apartamentoService.obtenerTodos();
         model.addAttribute("apartamentos", lista);
+        return "explorar";
+    }
+
+    // Buscador
+    @GetMapping("/buscar")
+    public String buscarApartamentos(@RequestParam String ubicacion, Model model) {
+        // Buscamos en la base de datos usando el método mágico que acabamos de crear
+        List<Apartamento> resultados = apartamentoRepository.findByDireccionContainingIgnoreCase(ubicacion);
+
+        // Pasamos los resultados a la vista
+        model.addAttribute("apartamentos", resultados);
+
+        // Pasamos también la palabra que buscaron para poder poner un título como "Resultados para: Madrid"
+        model.addAttribute("busqueda", ubicacion);
+
+        // ¡Reutilizamos la misma plantilla de explorar!
         return "explorar";
     }
 }

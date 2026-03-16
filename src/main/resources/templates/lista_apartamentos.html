@@ -40,7 +40,7 @@
                                 ¡Hola, <span class="fw-bold text-dark" th:text="${session.usuarioLogueado.nombre}">Usuario</span>!
                             </li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item fw-bold text-dark bg-light py-2" th:href="@{/apartamentos}">🏠 Panel Propietario</a></li>
+                            <li><a class="dropdown-item fw-bold text-dark bg-light py-2" th:href="@{/apartamentos}"> Panel Propietario</a></li>
                         </th:block>
                         <li><a class="dropdown-item py-2" th:href="@{/explorar}">Ver alojamientos</a></li>
                         <th:block th:unless="${session.usuarioLogueado == null}">

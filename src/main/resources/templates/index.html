@@ -70,13 +70,20 @@
         <h1 class="display-5 fw-bold mb-3">Encuentra tu apartamento perfecto</h1>
         <p class="lead fw-light mb-4">Descubre miles de apartamentos en las mejores ubicaciones del mundo</p>
 
-        <div class="search-pill d-none d-lg-flex align-items-center text-start">
+        <form th:action="@{/buscar}" method="get" class="search-pill d-none d-lg-flex align-items-center text-start">
 
             <div class="flex-grow-1 px-4 divider">
                 <label class="fw-bold small mb-0 text-dark">Ubicación</label>
                 <div class="d-flex align-items-center">
                     <i class="bi bi-geo-alt text-muted me-2"></i>
-                    <input type="text" class="form-control search-input p-0" placeholder="¿A dónde vas?">
+                    <input type="text" name="ubicacion" list="destinosPopulares" class="form-control..." placeholder="¿A dónde vas?" required>
+
+                    <datalist id="destinosPopulares">
+                        <option value="Madrid"></option>
+                        <option value="Barcelona"></option>
+                        <option value="Valencia"></option>
+                        <option value="Sevilla"></option>
+                    </datalist>
                 </div>
             </div>
 
@@ -105,12 +112,13 @@
             </div>
 
             <div class="pe-2">
-                <a th:href="@{/explorar}" class="btn btn-primary rounded-pill px-4 py-2 fw-bold">
+                <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 fw-bold">
                     <i class="bi bi-search me-1"></i> Buscar
-                </a>
+                </button>
             </div>
 
-        </div>
+        </form> </div>
+</div>
 
         <div class="d-block d-lg-none mt-4">
             <a th:href="@{/explorar}" class="btn btn-light text-primary rounded-pill px-5 py-3 fw-bold">
