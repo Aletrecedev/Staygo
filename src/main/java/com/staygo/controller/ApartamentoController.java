@@ -69,16 +69,15 @@ public class ApartamentoController {
     // Buscador
     @GetMapping("/buscar")
     public String buscarApartamentos(@RequestParam String ubicacion, Model model) {
-        // Buscamos en la base de datos usando el método mágico que acabamos de crear
+        // Buscar en la base de datos
         List<Apartamento> resultados = apartamentoRepository.findByDireccionContainingIgnoreCase(ubicacion);
 
-        // Pasamos los resultados a la vista
+        // Pasar los resultados a la vista
         model.addAttribute("apartamentos", resultados);
 
-        // Pasamos también la palabra que buscaron para poder poner un título como "Resultados para: Madrid"
+        // Pasar también la palabra que buscaron para poder poner un título como "Resultados para: Madrid"
         model.addAttribute("busqueda", ubicacion);
 
-        // ¡Reutilizamos la misma plantilla de explorar!
         return "explorar";
     }
 }
