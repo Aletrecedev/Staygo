@@ -86,4 +86,14 @@ public class ApartamentoController {
         model.addAttribute("busqueda", ubicacion);
         return "explorar";
     }
+
+    @GetMapping("/apartamento/{id}")
+    public String verDetalleApartamento(@PathVariable Integer id, Model model) {
+
+        Apartamento apartamento = apartamentoService.obtenerPorId(id);
+
+        model.addAttribute("apartamento", apartamento);
+
+        return "detalle_apartamento";
+    }
 }

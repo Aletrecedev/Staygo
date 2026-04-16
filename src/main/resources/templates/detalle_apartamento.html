@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${apartamento.nombre} + ' - StayGO'">Detalle - StayGO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+</head>
+<body class="bg-light">
+
+<div th:replace="~{fragments/layout :: navbar}"></div>
+
+<div class="container mt-5 mb-5">
+    <div class="row g-5">
+        <div class="col-lg-8">
+            <h1 class="fw-bold mb-3" th:text="${apartamento.nombre}">Nombre del Apartamento</h1>
+            <p class="text-muted"><i class="bi bi-geo-alt-fill me-2"></i><span th:text="${apartamento.direccion}">Dirección</span></p>
+
+            <div class="rounded-4 overflow-hidden mb-4 shadow">
+                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80" class="img-fluid w-100" style="max-height: 500px; object-fit: cover;">
+            </div>
+
+            <h3 class="fw-bold mt-4">Sobre este alojamiento</h3>
+            <p class="fs-5 text-secondary" th:text="${apartamento.descripcion}">Descripción completa aquí...</p>
+        </div>
+
+        <div class="col-lg-4 d-flex align-items-center">
+            <div class="card border-0 shadow-lg rounded-4 p-3 w-100">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <span class="fs-3 fw-bold">€<span th:text="${apartamento.precioNoche}">0</span></span>
+                        <span class="text-muted"> / noche</span>
+                    </div>
+
+                    <form th:action="@{/reservar}" method="post" class="d-flex flex-column gap-3">
+                        <input type="hidden" name="idApartamento" th:value="${apartamento.idApartamento}">
+
+                        <div class="border rounded-3 p-2">
+                            <div class="row g-0">
+                                <div class="col-6 border-end p-2">
+                                    <label class="small fw-bold text-uppercase">Llegada</label>
+                                    <input type="date" name="fechaInicio" class="form-control border-0 p-0 shadow-none" required>
+                                </div>
+                                <div class="col-6 p-2">
+                                    <label class="small fw-bold text-uppercase">Salida</label>
+                                    <input type="date" name="fechaFin" class="form-control border-0 p-0 shadow-none" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold rounded-pill py-3 mt-2 shadow">
+                            Reservar ahora
+                        </button>
+                    </form>
+
+                    <p class="text-center text-muted mt-3 small">No se te cobrará nada todavía</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -63,11 +63,18 @@
     <div class="row g-4">
         <div class="col-md-4" th:each="apartamento : ${apartamentos}">
             <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Apartamento" style="height: 200px; object-fit: cover;">
+
+                <a th:href="@{/apartamento/{id}(id=${apartamento.idApartamento})}">
+                    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Apartamento" style="height: 200px; object-fit: cover; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                </a>
 
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="card-title fw-bold mb-0" th:text="${apartamento.nombre}">Nombre</h5>
+
+                        <a th:href="@{/apartamento/{id}(id=${apartamento.idApartamento})}" class="text-decoration-none text-dark text-truncate d-inline-block w-75">
+                            <h5 class="card-title fw-bold mb-0" th:text="${apartamento.nombre}">Nombre</h5>
+                        </a>
+
                         <div class="d-flex align-items-center">
                             <i class="bi bi-star-fill text-warning small me-1"></i>
                             <span class="small fw-bold">4.9</span>
@@ -80,6 +87,7 @@
                     <div class="mt-3">
                         <span class="fw-bold fs-5">€<span th:text="${apartamento.precioNoche}"></span></span> <span class="text-muted small">/ noche</span>
                     </div>
+                </div>
                 </div>
 
                 <div class="card-footer bg-white border-top-0 pb-3 pt-0">
