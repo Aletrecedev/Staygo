@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <i class="bi bi-house-door-fill text-primary fs-3 me-2"></i>
+            <span class="navbar-brand-text">StayGO</span>
+        </a>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center gap-3">
+                <li class="nav-item dropdown">
+                    <div class="profile-pill d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+                        <i class="bi bi-list fs-5"></i>
+                        <i class="bi bi-person-circle fs-4" th:classappend="${session.usuarioLogueado == null ? 'text-secondary' : 'text-primary'}"></i>
+                    </div>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2">
+                        <th:block th:if="${session.usuarioLogueado == null}">
+                            <li><a class="dropdown-item fw-bold py-2" th:href="@{/registro}">Regístrate</a></li>
+                            <li><a class="dropdown-item py-2" th:href="@{/login}">Inicia sesión</a></li>
+                        </th:block>
+
+                        <th:block th:unless="${session.usuarioLogueado == null}">
+                            <li class="px-3 py-2 text-muted small">¡Hola, <span class="fw-bold text-dark" th:text="${session.usuarioLogueado.nombre}">Usuario</span>!</li>
+                            <li><hr class="dropdown-divider"></li>
+
+                            <th:block th:if="${session.usuarioLogueado.rol == 'PROPIETARIO'}">
+                                <li><a class="dropdown-item fw-bold text-primary py-2" th:href="@{/apartamentos}"><i class="bi bi-building me-2"></i>Mis Pisos</a></li>
+                                <li><a class="dropdown-item fw-bold text-success py-2" th:href="@{/reservas-recibidas}"><i class="bi bi-wallet2 me-2"></i>Ingresos y Reservas</a></li>
+                            </th:block>
+
+                            <th:block th:if="${session.usuarioLogueado.rol == 'CLIENTE'}">
+                                <li><a class="dropdown-item fw-bold py-2" th:href="@{/mis-viajes}"><i class="bi bi-airplane me-2"></i>Mis Viajes</a></li>
+                            </th:block>
+                        </th:block>
+
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item py-2" th:href="@{/explorar}">Explorar Alojamientos</a></li>
+
+                        <th:block th:unless="${session.usuarioLogueado == null}">
+                            <li><a class="dropdown-item py-2 text-danger fw-bold" th:href="@{/logout}">Cerrar sesión</a></li>
+                        </th:block>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+</html>

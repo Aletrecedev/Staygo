@@ -1,6 +1,7 @@
 package com.staygo.repository;
 
 import com.staygo.model.Apartamento;
+import com.staygo.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,5 @@ public interface ApartamentoRepository extends JpaRepository<Apartamento, Intege
     // donde la 'direccion' CONTENGA la palabra que te paso,
     // y además Ignora Mayúsculas y Minúsculas (IgnoreCase)".
     List<Apartamento> findByDireccionContainingIgnoreCase(String ubicacion);
+    List<Apartamento> findByPropietario(Usuario propietario);
 }

@@ -9,59 +9,7 @@
 </head>
 <body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-custom sticky-top">
-    <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="/">
-            <i class="bi bi-house-door-fill text-primary fs-3 me-2"></i>
-            <span class="navbar-brand-text">StayGO</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav align-items-center gap-3">
-
-                <li class="nav-item d-none d-lg-block">
-                    <a class="nav-link text-dark" href="#" title="Idioma"><i class="bi bi-globe fs-5"></i></a>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <div class="profile-pill d-flex align-items-center gap-2" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-list fs-5 text-dark"></i>
-                        <i class="bi bi-person-circle fs-4 text-secondary" th:if="${session.usuarioLogueado == null}"></i>
-                        <i class="bi bi-person-circle fs-4 text-primary" th:unless="${session.usuarioLogueado == null}"></i>
-                    </div>
-
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2">
-
-                        <th:block th:if="${session.usuarioLogueado == null}">
-                            <li><a class="dropdown-item fw-bold py-2" th:href="@{/registro}">Regístrate</a></li>
-                            <li><a class="dropdown-item py-2" th:href="@{/login}">Inicia sesión</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                        </th:block>
-
-                        <th:block th:unless="${session.usuarioLogueado == null}">
-                            <li class="px-3 py-2 text-muted small">
-                                ¡Hola, <span class="fw-bold text-dark" th:text="${session.usuarioLogueado.nombre}">Usuario</span>!
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li th:if="${session.usuarioLogueado.rol == 'PROPIETARIO'}">
-                                <a class="dropdown-item fw-bold text-primary py-2" th:href="@{/apartamentos}"> Panel Propietario</a>
-                            </li>
-                        </th:block>
-
-                        <li><a class="dropdown-item py-2" th:href="@{/explorar}">Ver alojamientos</a></li>
-
-                        <th:block th:unless="${session.usuarioLogueado == null}">
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item py-2 text-danger fw-bold" th:href="@{/logout}">Cerrar sesión</a></li>
-                        </th:block>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div th:replace="~{fragments/layout :: navbar}"></div>
 
 <div class="container mt-5">
     <div th:if="${busqueda == null}">
@@ -72,6 +20,27 @@
                 <div>
                     <strong class="d-block">¡Reserva confirmada!</strong>
                     Tu solicitud se ha procesado correctamente. ¡Prepara las maletas!
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${param.errorFechas}" class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-calendar-x-fill fs-4 me-3"></i>
+                <div>
+                    <strong class="d-block">Fechas no disponibles</strong>
+                    Lo sentimos, este apartamento ya está reservado durante esos días. Por favor, elige otras fechas.
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${param.errorLogica}" class="alert alert-warning alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+                <div>
+                    <strong class="d-block">Fechas incorrectas</strong>
+                    La fecha de salida debe ser posterior a la fecha de llegada.
                 </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

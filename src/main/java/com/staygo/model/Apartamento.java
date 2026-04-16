@@ -4,17 +4,24 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data // Esto genera automáticamente todos los getters, setters, toString, etc.
-@NoArgsConstructor // Genera un constructor vacío, obligatorio para Spring JPA
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "apartamentos")
 public class Apartamento {
 
+    // 1. EL ID ÚNICO DEL APARTAMENTO
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_apartamento")
     private Integer idApartamento;
 
+    // 2. LA RELACIÓN CON EL DUEÑO
+    @ManyToOne
+    @JoinColumn(name = "id_propietario", nullable = false)
+    private Usuario propietario;
+
+    // 3. DATOS
     private String nombre;
     private String direccion;
 
@@ -24,6 +31,4 @@ public class Apartamento {
     private Integer capacidad;
     private String descripcion;
 
-    @Column(name = "id_propietario")
-    private Integer idPropietario;
 }
