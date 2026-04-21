@@ -29,6 +29,7 @@ public class Apartamento {
     private Double precioNoche;
 
     private Integer capacidad;
+    @Column(length = 2000)
     private String descripcion;
 
     @Column(name = "imagen_url", length = 1000)
