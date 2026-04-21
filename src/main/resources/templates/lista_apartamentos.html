@@ -24,22 +24,29 @@
         </a>
     </div>
 
+    <div th:if="${#lists.isEmpty(apartamentos)}" class="text-center py-5 bg-white rounded-4 shadow-sm border-0">
+        <i class="bi bi-house-add text-muted" style="font-size: 4rem;"></i>
+        <h4 class="mt-3 text-secondary fw-bold">Aún no tienes propiedades</h4>
+        <p class="text-muted">Anímate a publicar tu primer alojamiento en StayGO.</p>
+    </div>
+
     <div class="row g-4">
         <div class="col-md-4" th:each="apartamento : ${apartamentos}">
-            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden transition-all hover-scale">
 
-                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Apartamento" style="height: 200px; object-fit: cover;">
+                <img th:src="${apartamento.imagenUrl != null and !apartamento.imagenUrl.isEmpty()} ? ${apartamento.imagenUrl} : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'"
+                     class="card-img-top" alt="Apartamento" style="height: 200px; object-fit: cover;">
 
                 <div class="card-body">
-                    <h5 class="card-title fw-bold mb-1" th:text="${apartamento.nombre}">Nombre</h5>
-                    <p class="text-muted small mb-2"><i class="bi bi-geo-alt me-1"></i> <span th:text="${apartamento.direccion}">Ubicación</span></p>
+                    <h5 class="card-title fw-bold mb-1 text-truncate" th:text="${apartamento.nombre}">Nombre</h5>
+                    <p class="text-muted small mb-2 text-truncate"><i class="bi bi-geo-alt-fill text-primary me-1"></i> <span th:text="${apartamento.direccion}">Ubicación</span></p>
                     <p class="card-text text-truncate small text-secondary" th:text="${apartamento.descripcion}">Descripción...</p>
 
                     <hr class="text-muted opacity-25">
 
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="fw-bold fs-5 text-primary">€<span th:text="${apartamento.precioNoche}"></span><span class="text-muted small fs-6 fw-normal"> / noche</span></span>
-                        <span class="badge bg-light text-dark border"><i class="bi bi-people me-1"></i> <span th:text="${apartamento.capacidad}"></span> máx</span>
+                        <span class="fw-bold fs-5 text-dark">€<span th:text="${apartamento.precioNoche}"></span><span class="text-muted small fs-6 fw-normal"> / noche</span></span>
+                        <span class="badge bg-light text-dark border"><i class="bi bi-people-fill text-secondary me-1"></i> <span th:text="${apartamento.capacidad}"></span> máx</span>
                     </div>
                 </div>
 
@@ -57,13 +64,6 @@
             </div>
         </div>
     </div>
-
-    <div th:if="${#lists.isEmpty(apartamentos)}" class="text-center py-5">
-        <i class="bi bi-house-add text-muted" style="font-size: 4rem;"></i>
-        <h4 class="mt-3 text-secondary">Aún no tienes propiedades</h4>
-        <p class="text-muted">Anímate a publicar tu primer alojamiento en StayGO.</p>
-    </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

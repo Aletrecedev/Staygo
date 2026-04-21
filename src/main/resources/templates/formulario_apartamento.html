@@ -12,59 +12,72 @@
 
 <div th:replace="~{fragments/layout :: navbar}"></div>
 
-<div class="container">
-    <div class="form-container">
-        <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
-            <i class="bi bi-house-gear text-primary fs-2 me-3"></i>
-            <h3 class="fw-bold mb-0" th:text="${apartamento.idApartamento == null ? 'Publicar Nuevo Alojamiento' : 'Editar Alojamiento'}">Gestionar</h3>
+<div class="container mt-5 mb-5">
+    <div class="card border-0 shadow-sm rounded-4 mx-auto" style="max-width: 800px;">
+        <div class="card-body p-4 p-md-5">
+
+            <div class="d-flex align-items-center mb-4 pb-3 border-bottom">
+                <i class="bi bi-house-gear text-primary fs-2 me-3"></i>
+                <h3 class="fw-bold mb-0" th:text="${apartamento.idApartamento == null ? 'Publicar Nuevo Alojamiento' : 'Editar Alojamiento'}">Gestionar</h3>
+            </div>
+
+            <form th:action="@{/apartamentos/guardar}" th:object="${apartamento}" method="post">
+
+                <input type="hidden" th:field="*{idApartamento}" />
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-secondary mb-1">Nombre del Alojamiento</label>
+                    <input type="text" class="form-control p-3 bg-light border-0" placeholder="Ej: Loft increíble con vistas al mar" th:field="*{nombre}" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-secondary mb-1">URL de la Imagen de portada</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted border-0"><i class="bi bi-image"></i></span>
+                        <input type="url" class="form-control p-3 bg-light border-0 ps-0" placeholder="https://ejemplo.com/mifoto.jpg" th:field="*{imagenUrl}">
+                    </div>
+                    <div class="form-text small">Pega el enlace directo a una imagen de tu alojamiento.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold small text-secondary mb-1">Dirección Completa</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted border-0"><i class="bi bi-geo-alt"></i></span>
+                        <input type="text" class="form-control p-3 bg-light border-0 ps-0" placeholder="Calle, Ciudad, País" th:field="*{direccion}" required>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <label class="form-label fw-bold small text-secondary mb-1">Precio por Noche (€)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted border-0"><i class="bi bi-currency-euro"></i></span>
+                            <input type="number" step="0.01" class="form-control p-3 bg-light border-0 ps-0" placeholder="0.00" th:field="*{precioNoche}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold small text-secondary mb-1">Capacidad (Huéspedes)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted border-0"><i class="bi bi-people"></i></span>
+                            <input type="number" class="form-control p-3 bg-light border-0 ps-0" placeholder="Ej: 4" th:field="*{capacidad}" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label class="form-label fw-bold small text-secondary mb-1">Descripción de tu espacio</label>
+                    <textarea class="form-control p-3 bg-light border-0" rows="4" placeholder="Describe qué hace único a tu alojamiento, qué servicios tiene, cómo es el barrio..." th:field="*{descripcion}"></textarea>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <a th:href="@{/apartamentos}" class="btn btn-outline-secondary fw-bold px-4 py-2 rounded-pill">Cancelar</a>
+                    <button type="submit" class="btn btn-primary fw-bold px-5 py-2 rounded-pill shadow-sm">
+                        <i class="bi bi-check2 me-1"></i> Guardar Alojamiento
+                    </button>
+                </div>
+            </form>
+
         </div>
-
-        <form th:action="@{/apartamentos/guardar}" th:object="${apartamento}" method="post">
-
-            <input type="hidden" th:field="*{idApartamento}" />
-
-            <div class="mb-4">
-                <label class="form-label fw-bold small text-secondary mb-1">Nombre del Alojamiento</label>
-                <input type="text" class="form-control p-3" placeholder="Ej: Loft increíble con vistas al mar" th:field="*{nombre}" required>
-            </div>
-
-            <div class="mb-4">
-                <label class="form-label fw-bold small text-secondary mb-1">Dirección Completa</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-geo-alt"></i></span>
-                    <input type="text" class="form-control p-3 border-start-0 ps-0" placeholder="Calle, Ciudad, País" th:field="*{direccion}" required>
-                </div>
-            </div>
-
-            <div class="row mb-4">
-                <div class="col-md-6 mb-3 mb-md-0">
-                    <label class="form-label fw-bold small text-secondary mb-1">Precio por Noche (€)</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-currency-euro"></i></span>
-                        <input type="number" step="0.01" class="form-control p-3 border-start-0 ps-0" placeholder="0.00" th:field="*{precioNoche}" required>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label fw-bold small text-secondary mb-1">Capacidad (Huéspedes)</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-white text-muted border-end-0"><i class="bi bi-people"></i></span>
-                        <input type="number" class="form-control p-3 border-start-0 ps-0" placeholder="Ej: 4" th:field="*{capacidad}" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-5">
-                <label class="form-label fw-bold small text-secondary mb-1">Descripción de tu espacio</label>
-                <textarea class="form-control p-3" rows="4" placeholder="Describe qué hace único a tu alojamiento, qué servicios tiene, cómo es el barrio..." th:field="*{descripcion}"></textarea>
-            </div>
-
-            <div class="d-flex justify-content-between align-items-center mt-2">
-                <a th:href="@{/apartamentos}" class="btn btn-light fw-bold px-4 py-2 rounded-pill text-secondary border">Cancelar</a>
-                <button type="submit" class="btn btn-primary fw-bold px-5 py-2 rounded-pill shadow-sm">
-                    <i class="bi bi-check2 me-1"></i> Guardar Alojamiento
-                </button>
-            </div>
-        </form>
     </div>
 </div>
 

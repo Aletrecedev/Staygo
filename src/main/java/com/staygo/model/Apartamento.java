@@ -31,4 +31,7 @@ public class Apartamento {
     private Integer capacidad;
     private String descripcion;
 
+    @Column(name = "imagen_url", length = 1000)
+    private String imagenUrl;
+
 }

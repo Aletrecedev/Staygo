@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -30,7 +31,7 @@ public class ApartamentoController {
             return "redirect:/login";
         }
 
-        // Usamos el nuevo método moderno del repositorio
+        // Usamos el método del repositorio
         List<Apartamento> lista = apartamentoRepository.findByPropietario(usuarioLogueado);
         model.addAttribute("apartamentos", lista);
 
@@ -80,10 +81,31 @@ public class ApartamentoController {
     }
 
     @GetMapping("/buscar")
-    public String buscarApartamentos(@RequestParam String ubicacion, Model model) {
-        List<Apartamento> resultados = apartamentoRepository.findByDireccionContainingIgnoreCase(ubicacion);
+    public String buscarApartamentos(
+            @RequestParam(name = "ubicacion", required = false) String ubicacion,
+            @RequestParam(name = "fechaInicio", required = false) String fechaInicioStr,
+            @RequestParam(name = "fechaFin", required = false) String fechaFinStr,
+            @RequestParam(name = "huespedes", required = false) Integer huespedes,
+            Model model) {
+
+        // 1. Parseamos las fechas (De String a LocalDate) si el usuario las ha enviado
+        LocalDate fechaInicio = (fechaInicioStr != null && !fechaInicioStr.isEmpty())
+                ? LocalDate.parse(fechaInicioStr) : null;
+        LocalDate fechaFin = (fechaFinStr != null && !fechaFinStr.isEmpty())
+                ? LocalDate.parse(fechaFinStr) : null;
+
+        // 2. Ejecutamos nuestra super consulta del repositorio
+        List<Apartamento> resultados = apartamentoRepository.buscarDisponibles(ubicacion, fechaInicio, fechaFin, huespedes);
+
+        // 3. Enviamos los resultados a la vista
         model.addAttribute("apartamentos", resultados);
+
+        // 4. Devolvemos los parámetros al Model para que el formulario recuerde la búsqueda
         model.addAttribute("busqueda", ubicacion);
+        model.addAttribute("fechaInicio", fechaInicioStr);
+        model.addAttribute("fechaFin", fechaFinStr);
+        model.addAttribute("huespedes", huespedes);
+
         return "explorar";
     }
 

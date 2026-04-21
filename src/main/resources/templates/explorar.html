@@ -6,15 +6,17 @@
     <title>StayGO - Explorar Alojamientos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="bg-light">
 
 <div th:replace="~{fragments/layout :: navbar}"></div>
 
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <div th:if="${busqueda == null}">
         <h2 class="mb-4 fw-bold">Alojamientos disponibles</h2>
+
         <div th:if="${param.reservaExito}" class="alert alert-success alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
             <div class="d-flex align-items-center">
                 <i class="bi bi-check-circle-fill fs-4 me-3"></i>
@@ -25,105 +27,75 @@
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+
         <div th:if="${param.errorFechas}" class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
             <div class="d-flex align-items-center">
                 <i class="bi bi-calendar-x-fill fs-4 me-3"></i>
                 <div>
                     <strong class="d-block">Fechas no disponibles</strong>
-                    Lo sentimos, este apartamento ya está reservado durante esos días. Por favor, elige otras fechas.
+                    Lo sentimos, este apartamento ya está reservado durante esos días.
                 </div>
             </div>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        <div th:if="${param.errorLogica}" class="alert alert-warning alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
-            <div class="d-flex align-items-center">
-                <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
-                <div>
-                    <strong class="d-block">Fechas incorrectas</strong>
-                    La fecha de salida debe ser posterior a la fecha de llegada.
-                </div>
-            </div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
         <p class="text-muted mb-4">Encuentra el lugar perfecto para tu próxima estancia.</p>
     </div>
 
     <div th:unless="${busqueda == null}" class="mb-4 d-flex justify-content-between align-items-center">
         <h2 class="fw-bold mb-0">Resultados para: <span class="text-primary" th:text="${busqueda}">Madrid</span></h2>
-        <a th:href="@{/explorar}" class="btn btn-outline-secondary btn-sm rounded-pill">Ver todos</a>
+        <a th:href="@{/explorar}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Ver todos</a>
     </div>
 
-    <div th:if="${busqueda != null and #lists.isEmpty(apartamentos)}" class="text-center py-5">
+    <div th:if="${busqueda != null and #lists.isEmpty(apartamentos)}" class="text-center py-5 bg-white rounded-4 shadow-sm">
         <i class="bi bi-search text-muted" style="font-size: 3rem;"></i>
-        <h4 class="mt-3 text-secondary">No encontramos alojamientos en esta zona</h4>
-        <p class="text-muted">Prueba a buscar con otra ciudad</p>
+        <h4 class="mt-3 text-secondary fw-bold">No encontramos alojamientos en esta zona</h4>
+        <p class="text-muted">Prueba a buscar con otra ciudad o filtros.</p>
     </div>
 
     <div class="row g-4">
-        <div class="col-md-4" th:each="apartamento : ${apartamentos}">
-            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="col-md-6 col-lg-4" th:each="apartamento : ${apartamentos}">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden transition-all hover-scale">
 
                 <a th:href="@{/apartamento/{id}(id=${apartamento.idApartamento})}">
-                    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="Apartamento" style="height: 200px; object-fit: cover; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <img th:src="${apartamento.imagenUrl != null and !apartamento.imagenUrl.isEmpty()} ? ${apartamento.imagenUrl} : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'"
+                         class="card-img-top" alt="Apartamento" style="height: 220px; object-fit: cover;">
                 </a>
 
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-
-                        <a th:href="@{/apartamento/{id}(id=${apartamento.idApartamento})}" class="text-decoration-none text-dark text-truncate d-inline-block w-75">
-                            <h5 class="card-title fw-bold mb-0" th:text="${apartamento.nombre}">Nombre</h5>
+                        <a th:href="@{/apartamento/{id}(id=${apartamento.idApartamento})}" class="text-decoration-none text-dark flex-grow-1">
+                            <h5 class="card-title fw-bold mb-0 text-truncate" th:text="${apartamento.nombre}">Nombre</h5>
                         </a>
-
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-star-fill text-warning small me-1"></i>
+                        <div class="ms-2">
+                            <i class="bi bi-star-fill text-warning small"></i>
                             <span class="small fw-bold">4.9</span>
                         </div>
                     </div>
 
-                    <p class="text-muted small mb-2"><i class="bi bi-geo-alt me-1"></i> <span th:text="${apartamento.direccion}">Ubicación</span></p>
-                    <p class="card-text text-truncate small" th:text="${apartamento.descripcion}">Descripción...</p>
+                    <p class="text-muted small mb-2"><i class="bi bi-geo-alt-fill text-primary me-1"></i> <span th:text="${apartamento.direccion}">Ubicación</span></p>
+                    <p class="card-text text-truncate small text-secondary mb-3" th:text="${apartamento.descripcion}">Descripción...</p>
 
-                    <div class="mt-3">
-                        <span class="fw-bold fs-5">€<span th:text="${apartamento.precioNoche}"></span></span> <span class="text-muted small">/ noche</span>
+                    <div class="mt-auto pt-2 border-top">
+                        <span class="fw-bold fs-5 text-dark">€<span th:text="${apartamento.precioNoche}"></span></span>
+                        <span class="text-muted small">/ noche</span>
                     </div>
                 </div>
-                </div>
 
-                <div class="card-footer bg-white border-top-0 pb-3 pt-0">
+                <div class="card-footer bg-white border-top-0 pb-4 pt-0">
 
-                    <div th:if="${session.usuarioLogueado != null and session.usuarioLogueado.rol != 'PROPIETARIO'}">
-                        <form th:action="@{/reservar}" method="post" class="d-flex flex-column gap-2">
-                            <input type="hidden" name="idApartamento" th:value="${apartamento.idApartamento}">
-
-                            <div class="row g-2 mt-1">
-                                <div class="col-6">
-                                    <label class="small text-muted mb-1">Llegada</label>
-                                    <input type="date" name="fechaInicio" class="form-control form-control-sm rounded-3" required>
-                                </div>
-                                <div class="col-6">
-                                    <label class="small text-muted mb-1">Salida</label>
-                                    <input type="date" name="fechaFin" class="form-control form-control-sm rounded-3" required>
-                                </div>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold mt-3 rounded-pill py-2">
-                                Confirmar Reserva
-                            </button>
-                        </form>
-                    </div>
-
-                    <div th:if="${session.usuarioLogueado == null}" class="mt-2 text-center">
+                    <div th:if="${session.usuarioLogueado == null}" class="mt-2">
                         <a th:href="@{/login}" class="btn btn-outline-primary btn-sm w-100 rounded-pill py-2 fw-bold">Inicia sesión para reservar</a>
                     </div>
 
+                    <div th:if="${session.usuarioLogueado != null and session.usuarioLogueado.rol == 'CLIENTE'}" class="mt-2">
+                        <a th:href="@{/apartamento/{id}(id=${apartamento.idApartamento})}" class="btn btn-primary btn-sm w-100 rounded-pill py-2 fw-bold shadow-sm">
+                            <i class="bi bi-calendar-check me-1"></i> Ver Disponibilidad
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-            </div>
-        </div>
-    </div>
-</div>
+        </div> </div> </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

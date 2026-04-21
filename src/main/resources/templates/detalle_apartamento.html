@@ -6,6 +6,9 @@
     <title th:text="${apartamento.nombre} + ' - StayGO'">Detalle - StayGO</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body class="bg-light">
 
@@ -17,39 +20,56 @@
             <h1 class="fw-bold mb-3" th:text="${apartamento.nombre}">Nombre del Apartamento</h1>
             <p class="text-muted"><i class="bi bi-geo-alt-fill me-2"></i><span th:text="${apartamento.direccion}">Dirección</span></p>
 
-            <div class="rounded-4 overflow-hidden mb-4 shadow">
-                <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80" class="img-fluid w-100" style="max-height: 500px; object-fit: cover;">
+            <div class="rounded-4 overflow-hidden mb-4 shadow border-0">
+                <img th:src="${apartamento.imagenUrl != null and !apartamento.imagenUrl.isEmpty()} ? ${apartamento.imagenUrl} : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80'"
+                     class="img-fluid w-100"
+                     style="max-height: 500px; object-fit: cover;"
+                     th:alt="${apartamento.nombre}">
             </div>
 
             <h3 class="fw-bold mt-4">Sobre este alojamiento</h3>
             <p class="fs-5 text-secondary" th:text="${apartamento.descripcion}">Descripción completa aquí...</p>
         </div>
 
-        <div class="col-lg-4 d-flex align-items-center">
-            <div class="card border-0 shadow-lg rounded-4 p-3 w-100">
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-lg rounded-4 p-3 w-100 position-sticky" style="top: 100px;">
                 <div class="card-body">
                     <div class="mb-4">
-                        <span class="fs-3 fw-bold">€<span th:text="${apartamento.precioNoche}">0</span></span>
+                        <span class="fs-3 fw-bold">€<span id="precioNoche" th:text="${apartamento.precioNoche}">0</span></span>
                         <span class="text-muted"> / noche</span>
                     </div>
 
                     <form th:action="@{/reservar}" method="post" class="d-flex flex-column gap-3">
                         <input type="hidden" name="idApartamento" th:value="${apartamento.idApartamento}">
 
-                        <div class="border rounded-3 p-2">
+                        <div class="border rounded-3 p-2 bg-white">
                             <div class="row g-0">
                                 <div class="col-6 border-end p-2">
-                                    <label class="small fw-bold text-uppercase">Llegada</label>
-                                    <input type="date" name="fechaInicio" class="form-control border-0 p-0 shadow-none" required>
+                                    <label class="small fw-bold text-uppercase text-muted" for="checkin">Llegada</label>
+                                    <input type="text" id="checkin" name="fechaInicio" class="form-control border-0 p-0 shadow-none bg-transparent fw-bold"
+                                           th:value="${param.fechaInicio}" placeholder="Añadir fecha" required>
                                 </div>
                                 <div class="col-6 p-2">
-                                    <label class="small fw-bold text-uppercase">Salida</label>
-                                    <input type="date" name="fechaFin" class="form-control border-0 p-0 shadow-none" required>
+                                    <label class="small fw-bold text-uppercase text-muted" for="checkout">Salida</label>
+                                    <input type="text" id="checkout" name="fechaFin" class="form-control border-0 p-0 shadow-none bg-transparent fw-bold"
+                                           th:value="${param.fechaFin}" placeholder="Añadir fecha" required>
                                 </div>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold rounded-pill py-3 mt-2 shadow">
+                        <div id="resumenPrecio" class="d-none mt-3">
+                            <div class="d-flex justify-content-between text-muted mb-2">
+                                <span>€<span th:text="${apartamento.precioNoche}"></span> x <span id="cantidadNoches">0</span> noches</span>
+                                <span>€<span id="subtotal">0</span></span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between fw-bold fs-5">
+                                <span>Total</span>
+                                <span class="text-primary">€<span id="totalFinal">0</span></span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold rounded-pill py-3 mt-2 shadow-sm transition-all hover-scale">
                             Reservar ahora
                         </button>
                     </form>
@@ -62,5 +82,58 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+
+<script>
+    flatpickr.localize(flatpickr.l10ns.es);
+
+    const precioPorNoche = parseFloat(document.getElementById('precioNoche').innerText);
+
+    function calcularTotal() {
+        const checkinDate = checkinPicker.selectedDates[0];
+        const checkoutDate = checkoutPicker.selectedDates[0];
+
+        if (checkinDate && checkoutDate) {
+            const diffTime = Math.abs(checkoutDate - checkinDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays > 0) {
+                const total = diffDays * precioPorNoche;
+                document.getElementById('cantidadNoches').innerText = diffDays;
+                document.getElementById('subtotal').innerText = total.toFixed(2);
+                document.getElementById('totalFinal').innerText = total.toFixed(2);
+                document.getElementById('resumenPrecio').classList.remove('d-none');
+            }
+        }
+    }
+
+    const checkoutPicker = flatpickr("#checkout", {
+        altInput: true,
+        altFormat: "j M Y",
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        onChange: calcularTotal
+    });
+
+    const checkinPicker = flatpickr("#checkin", {
+        altInput: true,
+        altFormat: "j M Y",
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        onChange: function(selectedDates) {
+            if (selectedDates.length > 0) {
+                let minCheckoutDate = new Date(selectedDates[0]);
+                minCheckoutDate.setDate(minCheckoutDate.getDate() + 1);
+
+                checkoutPicker.set("minDate", minCheckoutDate);
+                setTimeout(() => checkoutPicker.open(), 100);
+            }
+            calcularTotal();
+        }
+    });
+
+    setTimeout(calcularTotal, 500);
+</script>
 </body>
 </html>
