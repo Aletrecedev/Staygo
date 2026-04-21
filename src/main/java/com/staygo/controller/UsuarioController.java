@@ -66,6 +66,55 @@ public class UsuarioController {
         }
     }
 
+    // Mostrar la vista del Perfil
+    @GetMapping("/perfil")
+    public String mostrarPerfil(HttpSession session) {
+        // Comprobamos si hay alguien logueado
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+
+        // Si no hay sesión, lo mandamos al login por seguridad
+        if (usuarioLogueado == null) {
+            return "redirect:/login";
+        }
+
+        // Si está logueado, le mostramos su pantalla de perfil
+        return "perfil";
+    }
+
+    // Procesar los cambios del formulario de perfil
+    @PostMapping("/perfil/actualizar")
+    public String actualizarPerfil(@RequestParam("idUsuario") Integer idUsuario,
+                                   @RequestParam("nombre") String nombre,
+                                   @RequestParam("telefono") String telefono,
+                                   @RequestParam(value = "password", required = false) String password,
+                                   HttpSession session) {
+
+        // 1. Comprobamos la sesión por seguridad
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+
+        // Medida de seguridad extra: verificar que el ID que llega del formulario
+        // es el mismo que el del usuario en sesión (para evitar que alguien modifique otro perfil)
+        if (usuarioLogueado == null || !usuarioLogueado.getIdUsuario().equals(idUsuario)) {
+            return "redirect:/login";
+        }
+
+        // 2. Actualizamos los datos del objeto (esto actualiza automáticamente la sesión también)
+        usuarioLogueado.setNombre(nombre);
+        usuarioLogueado.setTelefono(telefono);
+
+        // 3. Control de contraseña: solo la cambiamos si ha escrito algo nuevo
+        if (password != null && !password.trim().isEmpty()) {
+            // IMPORTANTE: Encriptamos la nueva contraseña antes de guardarla para que el login siga funcionando
+            usuarioLogueado.setContrasena(passwordEncoder.encode(password));
+        }
+
+        // 4. Guardamos los cambios en la base de datos
+        usuarioRepository.save(usuarioLogueado);
+
+        // 5. Redirigimos de vuelta al perfil activando la alerta de éxito (?exito=true)
+        return "redirect:/perfil?exito=true";
+    }
+
     // Cerrar sesión
     @GetMapping("/logout")
     public String cerrarSesion(HttpSession session) {

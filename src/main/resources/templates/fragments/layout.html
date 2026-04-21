@@ -10,12 +10,18 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav align-items-center gap-3">
 
-                <li class="nav-item">
-                    <a class="nav-link text-dark d-flex align-items-center" href="#" role="button" title="Idioma">
+                <li class="nav-item dropdown">
+                    <a class="nav-link text-dark d-flex align-items-center border border-transparent hover-shadow rounded-circle p-2 transition-all" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Idioma">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-globe" viewBox="0 0 16 16">
                             <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.228 4h1.862zM1.679 5a7.07 7.07 0 0 0-.311 2.5h1.954A8.452 8.452 0 0 1 3.2 5H1.679zM1.5 8h1.905c.018.86.136 1.688.334 2.5H1.68A7.07 7.07 0 0 0 1.5 8zm1.728 3.5h1.862c.16.59.349 1.127.561 1.604a6.7 6.7 0 0 0 .598.934 7.025 7.025 0 0 0-3.021-2.538zM5.145 12c.175.69.4 1.328.665 1.91.552 1.034 1.218 1.65 1.887 1.855V12H5.145zM8.5 15.923c.67-.204 1.335-.82 1.887-1.855.265-.582.49-1.22.665-1.91H8.5v3.768zm3.021-2.538a6.7 6.7 0 0 0 .598-.934c.212-.477.4-1.014.56-1.604h1.862a7.025 7.025 0 0 1-3.02-2.538zM14.321 11h-1.954c.198-.812.316-1.64.334-2.5h1.905a7.07 7.07 0 0 1-.285 2.5zm.285-3.5h-1.905a8.452 8.452 0 0 0-.334-2.5h1.954a7.07 7.07 0 0 1 .285 2.5zM12.772 4h-1.862c-.16-.59-.349-1.127-.561-1.604a6.7 6.7 0 0 0-.598-.933 7.025 7.025 0 0 1 3.02 2.537zM8.5 1.077c.67.204 1.335.82 1.887 1.855.265.582.49 1.22.665 1.91H8.5V1.077zM7.5 5H4.855c-.175.69-.4 1.328-.665 1.91A10.3 10.3 0 0 0 3.868 8H7.5V5zm0 4H3.868c.08.7.202 1.36.322 1.91.265.582.49 1.22.665 1.91H7.5V9zm1 0v3.82c.175-.69.4-1.328.665-1.91.12-.55.242-1.21.322-1.91H8.5zm0-4v3H12.132c-.08-.7-.202-1.36-.322-1.91-.265-.582-.49-1.22-.665-1.91H8.5z"/>
                         </svg>
                     </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2">
+                        <li><h6 class="dropdown-header fw-bold text-uppercase small">Selecciona tu idioma</h6></li>
+                        <li><a class="dropdown-item py-2 d-flex align-items-center" th:href="@{''(lang=es)}">🇪🇸 Español (ES)</a></li>
+                        <li><a class="dropdown-item py-2 d-flex align-items-center" th:href="@{''(lang=en)}">🇬🇧 English (EN)</a></li>
+                    </ul>
                 </li>
 
                 <li class="nav-item dropdown">
@@ -42,6 +48,9 @@
                             <th:block th:if="${session.usuarioLogueado.rol == 'CLIENTE'}">
                                 <li><a class="dropdown-item fw-bold py-2" th:href="@{/mis-viajes}"><i class="bi bi-suitcase-lg me-2"></i>Mis Reservas</a></li>
                             </th:block>
+
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item fw-bold py-2" th:href="@{/perfil}"><i class="bi bi-person me-2"></i>Mi Perfil</a></li>
                         </th:block>
 
                         <li><hr class="dropdown-divider"></li>
