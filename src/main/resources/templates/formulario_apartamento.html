@@ -23,7 +23,7 @@
 
             <form th:action="@{/apartamentos/guardar}" th:object="${apartamento}" method="post">
 
-                <input type="hidden" th:field="*{idApartamento}" />
+                <input type="hidden" name="idApartamento" th:value="${apartamento.idApartamento}" th:if="${apartamento.idApartamento != null}" />
 
                 <div class="mb-4">
                     <label class="form-label fw-bold small text-secondary mb-1">Nombre del Alojamiento</label>
