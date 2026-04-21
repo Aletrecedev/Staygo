@@ -39,7 +39,21 @@ public class ApartamentoController {
     }
 
     @GetMapping("/apartamentos/nuevo")
-    public String mostrarFormulario(Model model) {
+    public String mostrarFormularioNuevo(Model model, HttpSession session) {
+        // 1. Verificamos quién intenta entrar
+        Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+
+        // 2. Si no ha iniciado sesión, lo mandamos al login
+        if (usuarioLogueado == null) {
+            return "redirect:/login";
+        }
+
+        // 3. Si es un CLIENTE (no propietario), lo devolvemos a la home con un aviso
+        if (!usuarioLogueado.getRol().equals("PROPIETARIO")) {
+            return "redirect:/?errorAcceso=true";
+        }
+
+        // Si pasa todas las aduanas, le damos el formulario limpio
         model.addAttribute("apartamento", new Apartamento());
         return "formulario_apartamento";
     }

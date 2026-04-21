@@ -56,4 +56,70 @@
         </div>
     </div>
 </nav>
+<footer th:fragment="footer" class="bg-white border-top pt-5 pb-4 mt-auto">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-4 col-md-6">
+                <a class="d-flex align-items-center text-decoration-none mb-3" href="/">
+                    <i class="bi bi-house-door-fill text-primary fs-3 me-2"></i>
+                    <span class="text-primary fw-bold fs-4">StayGO</span>
+                </a>
+                <p class="text-muted small mb-4 pe-lg-4">
+                    Encuentra tu alojamiento ideal en cualquier parte del mundo. Plataforma diseñada para conectar viajeros con los mejores anfitriones.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-muted text-primary-hover transition-all"><i class="bi bi-instagram fs-5"></i></a>
+                    <a href="#" class="text-muted text-primary-hover transition-all"><i class="bi bi-twitter-x fs-5"></i></a>
+                    <a href="#" class="text-muted text-primary-hover transition-all"><i class="bi bi-facebook fs-5"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <h6 class="fw-bold mb-3 text-dark">Soporte</h6>
+                <ul class="list-unstyled mb-0 small">
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Centro de ayuda</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Opciones de cancelación</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Seguridad y confianza</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-md-6">
+                <h6 class="fw-bold mb-3 text-dark">Empresa</h6>
+                <ul class="list-unstyled mb-0 small">
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Sobre nosotros</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Trabaja en StayGO</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Inversores</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <h6 class="fw-bold mb-3 text-dark">Hospedar</h6>
+                <ul class="list-unstyled mb-0 small">
+                    <li class="mb-2">
+                        <a th:if="${session.usuarioLogueado == null}" th:href="@{/registro}" class="text-muted text-decoration-none fw-bold">Pon tu espacio en StayGO</a>
+
+                        <a th:unless="${session.usuarioLogueado == null}" th:href="@{/apartamentos/nuevo}" class="text-muted text-decoration-none fw-bold">Pon tu espacio en StayGO</a>
+                    </li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Protección para anfitriones</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Foro de la comunidad</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="my-4 text-muted opacity-25">
+
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <p class="text-muted small mb-0">
+                &copy; 2026 StayGO, Inc. Todos los derechos reservados.
+            </p>
+            <ul class="list-inline mb-0 small mt-2 mt-md-0">
+                <li class="list-inline-item"><a href="#" class="text-muted text-decoration-none">Privacidad</a></li>
+                <li class="list-inline-item text-muted mx-1">·</li>
+                <li class="list-inline-item"><a href="#" class="text-muted text-decoration-none">Términos</a></li>
+                <li class="list-inline-item text-muted mx-1">·</li>
+                <li class="list-inline-item"><a href="#" class="text-muted text-decoration-none">Mapa del sitio</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>
 </html>
