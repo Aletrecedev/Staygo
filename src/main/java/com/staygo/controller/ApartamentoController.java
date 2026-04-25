@@ -132,4 +132,8 @@ public class ApartamentoController {
 
         return "detalle_apartamento";
     }
+
+
+
+
 }

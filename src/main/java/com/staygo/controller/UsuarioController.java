@@ -57,7 +57,7 @@ public class UsuarioController {
 
             // Éxito
             session.setAttribute("usuarioLogueado", usuario);
-            return "redirect:/explorar";
+            return "redirect:/";
 
         } else {
             // Error (O no existe el email, o la contraseña está mal)

@@ -137,6 +137,53 @@
         </div>
     </div>
 </div>
+
+<div class="container mt-5 mb-5">
+    <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-star-fill text-warning fs-3 me-2"></i>
+        <h3 class="fw-bold mb-0">Alojamientos destacados</h3>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-3" th:each="apartamento : ${destacados}">
+            <div class="card h-100 border-0 shadow-sm position-relative rounded-4 overflow-hidden">
+
+                <img th:src="${apartamento.imagenUrl != null and !apartamento.imagenUrl.isEmpty() ? apartamento.imagenUrl : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Apartamento">
+
+                <div class="position-absolute top-0 end-0 m-3 badge bg-white text-dark shadow-sm fs-6 p-2 rounded-pill">
+                    <span class="fw-bold" th:text="${apartamento.precioNoche}">50</span>€ <span class="text-muted fw-normal small">/ noche</span>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title fw-bold text-truncate mb-0" th:text="${apartamento.nombre}">Apartamento</h5>
+                    </div>
+                    <p class="text-muted small mb-3"><i class="bi bi-geo-alt me-1"></i><span th:text="${apartamento.direccion}">Ubicación</span></p>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                        <small class="text-muted"><i class="bi bi-people me-1"></i> Máx. <span th:text="${apartamento.capacidad != null ? apartamento.capacidad : '4'}">4</span> pers.</small>
+
+                        <a th:href="@{/apartamento/{id}(id=${apartamento.idApartamento})}" class="btn btn-primary btn-sm rounded-pill fw-bold px-3">Ver más</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5 mb-5">
+    <div class="host-banner rounded-4 position-relative overflow-hidden d-flex align-items-center shadow">
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to right, rgba(0,30,60,0.8) 0%, rgba(0,30,60,0.3) 50%, rgba(0,0,0,0) 100%); z-index: 1;"></div>
+
+        <div class="p-5 p-md-5 z-2 w-100 text-white" style="max-width: 600px;">
+            <h2 class="display-5 fw-bold mb-3">Abre tus puertas al mundo</h2>
+            <p class="lead mb-4">Gana dinero extra compartiendo tu espacio. Ser anfitrión en StayGO es fácil, seguro y te permite conocer a viajeros increíbles.</p>
+            <a th:href="@{/registro-anfitrion}" class="btn btn-light text-primary rounded-pill px-4 py-3 fw-bold shadow-sm fs-5">
+                Conviértete en anfitrión
+            </a>
+        </div>
+    </div>
+</div>
 <div th:replace="~{fragments/layout :: footer}"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

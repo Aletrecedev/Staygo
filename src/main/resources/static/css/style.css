@@ -128,3 +128,11 @@
 .poster-overlay {
     background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.6) 100%);
 }
+
+/* --- BANNER ANFITRIÓN --- */
+.host-banner {
+    background-image: url('../img/host-banner.webp');
+    background-size: cover;
+    background-position: center 50%;
+    min-height: 500px;
+}
