@@ -16,19 +16,41 @@
 
 <div class="container mt-5 mb-5">
     <div class="row g-5">
-        <div class="col-lg-8">
-            <h1 class="fw-bold mb-3" th:text="${apartamento.nombre}">Nombre del Apartamento</h1>
-            <p class="text-muted"><i class="bi bi-geo-alt-fill me-2"></i><span th:text="${apartamento.direccion}">Dirección</span></p>
 
-            <div class="rounded-4 overflow-hidden mb-4 shadow border-0">
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-start mb-1">
+                <h1 class="fw-bold mb-0" th:text="${apartamento.nombre}">Nombre del Apartamento</h1>
+                <div class="d-none d-md-flex gap-2 mt-2">
+                    <button class="btn btn-sm btn-light border-0 text-decoration-underline fw-bold"><i class="bi bi-box-arrow-up me-1"></i> Compartir</button>
+                    <button class="btn btn-sm btn-light border-0 text-decoration-underline fw-bold"><i class="bi bi-heart me-1"></i> Guardar</button>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-star-fill text-dark small me-1"></i>
+                <span class="fw-bold me-3">4.9</span>
+                <span class="text-muted text-decoration-underline"><i class="bi bi-geo-alt-fill me-1 text-primary"></i><span th:text="${apartamento.direccion}">Dirección</span></span>
+            </div>
+
+            <div class="rounded-4 overflow-hidden mb-4 shadow-sm border-0 position-relative">
                 <img th:src="${apartamento.imagenUrl != null and !apartamento.imagenUrl.isEmpty()} ? ${apartamento.imagenUrl} : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80'"
                      class="img-fluid w-100"
-                     style="max-height: 500px; object-fit: cover;"
+                     style="height: 450px; object-fit: cover;"
                      th:alt="${apartamento.nombre}">
             </div>
 
-            <h3 class="fw-bold mt-4">Sobre este alojamiento</h3>
-            <p class="fs-5 text-secondary" th:text="${apartamento.descripcion}">Descripción completa aquí...</p>
+            <div class="d-flex flex-wrap gap-4 text-dark mb-4 fs-6">
+                <span><i class="bi bi-people fs-5 me-2"></i> Máx. <span th:text="${apartamento.capacidad != null ? apartamento.capacidad : '4'}">4</span> huéspedes</span>
+                <span><i class="bi bi-door-closed fs-5 me-2"></i> Dormitorios privados</span>
+                <span><i class="bi bi-droplet fs-5 me-2"></i> Baño completo</span>
+                <span><i class="bi bi-wifi fs-5 me-2"></i> Wifi gratis</span>
+            </div>
+
+
+            <hr class="text-muted mb-4 opacity-25">
+
+            <h4 class="fw-bold mb-3">Sobre este alojamiento</h4>
+            <p class="fs-6 text-secondary lh-lg" style="white-space: pre-line;" th:text="${apartamento.descripcion}">Descripción completa aquí...</p>
         </div>
 
         <div class="col-lg-4">
