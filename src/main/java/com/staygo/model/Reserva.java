@@ -33,4 +33,25 @@ public class Reserva {
 
     @Column(name = "importe_total")
     private Double precioTotal;
+
+    // NUEVO CAMPO: Estado de la reserva (Vital para la lógica de cancelación)
+    @Column(nullable = false)
+    private String estado = "CONFIRMADA"; // Valor por defecto al crear una reserva
+
+    // NOTA SENIOR: Si más adelante añades valoraciones (como en tu PDF inicial),
+    // irían aquí:
+    // private String valoracionHuesped;
+    // private String valoracionPropietario;
+
+    // LÓGICA DE NEGOCIO: ¿Se puede cancelar esta reserva?
+    public boolean isCancelable() {
+        // 1. Si ya está cancelada, obvio no se puede volver a cancelar
+        if ("CANCELADA".equals(this.estado)) {
+            return false;
+        }
+
+        // 2. Si faltan 2 días o menos, tampoco se puede
+        long diasHastaCheckin = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), this.fechaInicio);
+        return diasHastaCheckin > 2;
+    }
 }

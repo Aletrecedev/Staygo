@@ -15,6 +15,17 @@
 <div th:replace="~{fragments/layout :: navbar}"></div>
 
 <div class="container mt-5 mb-5">
+
+    <div th:if="${param.errorFechas}" class="alert alert-danger alert-dismissible fade show rounded-4 shadow-sm mb-4" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+            <div>
+                <strong>¡No se pudo realizar la reserva!</strong><br>
+                Por favor, asegúrate de seleccionar fechas válidas y disponibles para tu estancia.
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <div class="row g-5">
 
         <div class="col-lg-8">

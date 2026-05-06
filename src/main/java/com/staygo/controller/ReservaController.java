@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.transaction.annotation.Transactional;
+import java.time.temporal.ChronoUnit;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,8 +31,8 @@ public class ReservaController {
 
     @PostMapping("/reservar")
     public String hacerReserva(@RequestParam(name = "idApartamento") Integer idApartamento,
-                               @RequestParam(name = "fechaInicio") String fechaInicio,
-                               @RequestParam(name = "fechaFin") String fechaFin,
+                               @RequestParam(name = "fechaInicio", required = false) String fechaInicio,
+                               @RequestParam(name = "fechaFin", required = false) String fechaFin,
                                HttpSession session) {
 
         // 1. Comprobar que el usuario haya iniciado sesión
@@ -38,6 +40,16 @@ public class ReservaController {
         if (clienteLogueado == null) {
             return "redirect:/login";
         }
+
+        // --- ESCUDO: NUNCA CONFIAR EN EL FRONTEND ---
+        // Si las fechas vienen nulas o vacías (""), abortamos la misión ANTES de que Java explote
+        if (fechaInicio == null || fechaInicio.trim().isEmpty() ||
+                fechaFin == null || fechaFin.trim().isEmpty()) {
+
+            // Lo devolvemos a la vista del apartamento (o a explorar) con un parámetro de error
+            return "redirect:/apartamento/" + idApartamento + "?errorFechas=true";
+        }
+        // ---------------------------------------------------
 
         // 2. Buscar el apartamento que quiere reservar
         Apartamento apartamento = apartamentoRepository.findById(idApartamento).orElse(null);
@@ -101,8 +113,12 @@ public class ReservaController {
         return "mis-viajes"; // Nombre del archivo HTML
     }
 
-    @GetMapping("/reservas/cancelar/{id}")
+    // @PostMapping porque es una acción destructiva/modificadora
+    // @Transactional para asegurar la integridad (si falla la BD, se hace rollback)
+    @PostMapping("/reservas/cancelar/{id}")
+    @Transactional
     public String cancelarReserva(@PathVariable Integer id, HttpSession session) {
+
         // 1. Verificar quién está logueado
         Usuario clienteLogueado = (Usuario) session.getAttribute("usuarioLogueado");
         if (clienteLogueado == null || !clienteLogueado.getRol().equals("CLIENTE")) {
@@ -113,17 +129,26 @@ public class ReservaController {
         Reserva reserva = reservaRepository.findById(id).orElse(null);
 
         // 3. SEGURIDAD: Comprobar que la reserva existe y que el dueño es el usuario actual
-        // (Nota: Asegúrate de que el getter de ID de tu Usuario sea getIdUsuario(). Si es solo getId(), cámbialo aquí)
         if (reserva != null && reserva.getCliente().getIdUsuario().equals(clienteLogueado.getIdUsuario())) {
 
-            // 4. Borramos la reserva de la tabla
-            reservaRepository.delete(reserva);
+            // 4. SEGURIDAD Y NEGOCIO (Time-boxing): ¿Faltan menos de 48h (2 días)?
+            LocalDate hoy = LocalDate.now();
+            long diasHastaCheckin = ChronoUnit.DAYS.between(hoy, reserva.getFechaInicio());
 
-            // Redirigimos con una bandera de éxito
+            if (diasHastaCheckin <= 2) {
+                // Faltan 2 días o menos, o el viaje ya empezó/pasó. Bloqueamos.
+                return "redirect:/mis-viajes?error_tiempo=true";
+            }
+
+            // 5. UPDATE en vez de DELETE: Cambiamos el estado para no destruir la contabilidad
+            reserva.setEstado("CANCELADA");
+            reservaRepository.save(reserva);
+
+            // Redirigimos con la bandera de éxito
             return "redirect:/mis-viajes?cancelada=true";
         }
 
-        // Si intenta borrar algo que no es suyo, lo devolvemos con error
+        // Si intenta cancelar algo que no es suyo o manipuló el ID del formulario
         return "redirect:/mis-viajes?error=true";
     }
 
