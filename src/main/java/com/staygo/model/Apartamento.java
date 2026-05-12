@@ -35,4 +35,8 @@ public class Apartamento {
     @Column(name = "imagen_url", length = 1000)
     private String imagenUrl;
 
+    // Cuando un propietario crea un piso, este nace "activo".
+    @Column(nullable = false)
+    private boolean activo = true;
+
 }

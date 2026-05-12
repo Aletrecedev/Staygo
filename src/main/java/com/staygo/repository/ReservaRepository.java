@@ -20,7 +20,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Integer> {
     // Para que un Propietario pueda ver quién ha reservado su piso
     List<Reserva> findByApartamento(Apartamento apartamento);
 
-    // EL MOTOR DEL CALENDARIO: Solo busca choques en reservas CONFIRMADAS
+    // MOTOR DEL CALENDARIO: Solo busca choques en reservas CONFIRMADAS
     // y permite que el check-out de uno sea el check-in de otro (usando < y > estrictos)
     @Query("SELECT r FROM Reserva r WHERE r.apartamento = :piso " +
             "AND r.estado = 'CONFIRMADA' " +

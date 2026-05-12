@@ -7,6 +7,7 @@ import com.staygo.service.ApartamentoService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,8 @@ public class ApartamentoController {
         }
 
         // Usamos el método del repositorio
-        List<Apartamento> lista = apartamentoRepository.findByPropietario(usuarioLogueado);
+        // CAMBIO SENIOR: Filtramos para que no salgan los pisos "borrados" (Soft Delete) en su lista
+        List<Apartamento> lista = apartamentoRepository.findByPropietarioAndActivoTrue(usuarioLogueado);
         model.addAttribute("apartamentos", lista);
 
         return "lista_apartamentos";
@@ -72,10 +74,30 @@ public class ApartamentoController {
         return "redirect:/apartamentos";
     }
 
-    @GetMapping("/apartamentos/borrar/{id}")
-    public String borrarApartamento(@PathVariable Integer id) {
-        apartamentoService.borrar(id);
-        return "redirect:/apartamentos";
+    @PostMapping("/apartamentos/borrar/{id}")
+    @Transactional // Importante para asegurar que la actualización se realice correctamente
+    public String borrarApartamento(@PathVariable Integer id, HttpSession session) {
+        // 1. Verificación de seguridad básica (Login y Rol)
+        Usuario propietarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+        if (propietarioLogueado == null || !propietarioLogueado.getRol().equals("PROPIETARIO")) {
+            return "redirect:/login";
+        }
+
+        // 2. Buscar el apartamento
+        Apartamento apartamento = apartamentoRepository.findById(id).orElse(null);
+
+        // 3. Seguridad: Verificar que el apartamento existe y pertenece al propietario que intenta borrarlo
+        if (apartamento != null && apartamento.getPropietario().getIdUsuario().equals(propietarioLogueado.getIdUsuario())) {
+
+            // --- SOFT DELETE ---
+            // En lugar de borrarlo y destruir el historial de reservas, lo desactivamos
+            apartamento.setActivo(false);
+            apartamentoRepository.save(apartamento);
+
+            return "redirect:/apartamentos?exito=true";
+        }
+
+        return "redirect:/apartamentos?error=true";
     }
 
     @GetMapping("/apartamentos/editar/{id}")
@@ -85,11 +107,14 @@ public class ApartamentoController {
         return "formulario_apartamento";
     }
 
+    // ==========================================
     // Vistas PÚBLICAS / CLIENTES
+    // ==========================================
 
     @GetMapping("/explorar")
     public String explorarApartamentos(Model model) {
-        List<Apartamento> lista = apartamentoService.obtenerTodos();
+        // CAMBIO SENIOR: Solo mostramos lo que está disponible para el público (activo = true)
+        List<Apartamento> lista = apartamentoRepository.findByActivoTrue();
         model.addAttribute("apartamentos", lista);
         return "explorar";
     }
@@ -109,6 +134,7 @@ public class ApartamentoController {
                 ? LocalDate.parse(fechaFinStr) : null;
 
         // 2. Ejecutamos nuestra super consulta del repositorio
+        // IMPORTANTE: Asegúrate de que el método en el Repository incluya "AND a.activo = true"
         List<Apartamento> resultados = apartamentoRepository.buscarDisponibles(ubicacion, fechaInicio, fechaFin, huespedes);
 
         // 3. Enviamos los resultados a la vista
@@ -128,12 +154,13 @@ public class ApartamentoController {
 
         Apartamento apartamento = apartamentoService.obtenerPorId(id);
 
+        // ESCUDO DE SEGURIDAD: Si alguien intenta entrar por URL directa a un piso desactivado (borrado lógicamente)
+        if (apartamento == null || !apartamento.isActivo()) {
+            return "redirect:/explorar";
+        }
+
         model.addAttribute("apartamento", apartamento);
 
         return "detalle_apartamento";
     }
-
-
-
-
 }
