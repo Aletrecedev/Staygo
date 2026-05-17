@@ -9,4 +9,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     // Consulta
     Usuario findByEmail(String email);
+
+    // El escudo del Registro:
+    boolean existsByEmail(String email);
 }

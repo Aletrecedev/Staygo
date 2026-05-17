@@ -59,6 +59,7 @@
 
                 <a th:href="@{/apartamento/{id}(id=${apartamento.idApartamento})}">
                     <img th:src="${apartamento.imagenUrl != null and !apartamento.imagenUrl.isEmpty()} ? ${apartamento.imagenUrl} : 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'"
+                         onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';"
                          class="card-img-top" alt="Apartamento" style="height: 220px; object-fit: cover;">
                 </a>
 

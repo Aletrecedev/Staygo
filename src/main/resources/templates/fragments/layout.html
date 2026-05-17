@@ -14,7 +14,8 @@
                        style="font-weight: 500; transition: background-color 0.2s;"
                        onmouseover="this.style.backgroundColor='#f8f9fa'"
                        onmouseout="this.style.backgroundColor='transparent'"
-                       th:href="@{/explorar}">
+                       th:href="@{/explorar}"
+                       th:text="#{nav.explorar}">
                         Explorar
                     </a>
                 </li>
@@ -24,7 +25,8 @@
                        style="font-weight: 500; transition: background-color 0.2s;"
                        onmouseover="this.style.backgroundColor='#f8f9fa'"
                        onmouseout="this.style.backgroundColor='transparent'"
-                       th:href="@{/registro}">
+                       th:href="@{/registro}"
+                       th:text="#{nav.publicar}">
                         Pon tu espacio en StayGO
                     </a>
                 </li>
@@ -51,8 +53,8 @@
 
                     <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2">
                         <th:block th:if="${session.usuarioLogueado == null}">
-                            <li><a class="dropdown-item fw-bold py-2" th:href="@{/registro}">Regístrate</a></li>
-                            <li><a class="dropdown-item py-2" th:href="@{/login}">Inicia sesión</a></li>
+                            <li><a class="dropdown-item fw-bold py-2" th:href="@{/registro}" th:text="#{nav.registrate}">Regístrate</a></li>
+                            <li><a class="dropdown-item py-2" th:href="@{/login}" th:text="#{nav.iniciar_sesion}">Inicia sesión</a></li>
                         </th:block>
 
                         <th:block th:unless="${session.usuarioLogueado == null}">
@@ -73,10 +75,10 @@
                         </th:block>
 
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item py-2" th:href="@{/explorar}">Explorar Alojamientos</a></li>
+                        <li><a class="dropdown-item py-2" th:href="@{/explorar}" th:text="#{nav.explorar}">Explorar Alojamientos</a></li>
 
                         <th:block th:unless="${session.usuarioLogueado == null}">
-                            <li><a class="dropdown-item py-2 text-danger fw-bold" th:href="@{/logout}">Cerrar sesión</a></li>
+                            <li><a class="dropdown-item py-2 text-danger fw-bold" th:href="@{/logout}" th:text="#{nav.cerrar_sesion}">Cerrar sesión</a></li>
                         </th:block>
                     </ul>
                 </li>
@@ -84,6 +86,7 @@
         </div>
     </div>
 </nav>
+
 <footer th:fragment="footer" class="bg-white border-top pt-5 pb-4 mt-auto">
     <div class="container">
         <div class="row gy-4">
@@ -123,9 +126,8 @@
                 <h6 class="fw-bold mb-3 text-dark">Hospedar</h6>
                 <ul class="list-unstyled mb-0 small">
                     <li class="mb-2">
-                        <a th:if="${session.usuarioLogueado == null}" th:href="@{/registro}" class="text-muted text-decoration-none fw-bold">Pon tu espacio en StayGO</a>
-
-                        <a th:unless="${session.usuarioLogueado == null}" th:href="@{/apartamentos/nuevo}" class="text-muted text-decoration-none fw-bold">Pon tu espacio en StayGO</a>
+                        <a th:if="${session.usuarioLogueado == null}" th:href="@{/registro}" class="text-muted text-decoration-none fw-bold" th:text="#{nav.publicar}">Pon tu espacio en StayGO</a>
+                        <a th:unless="${session.usuarioLogueado == null}" th:href="@{/apartamentos/nuevo}" class="text-muted text-decoration-none fw-bold" th:text="#{nav.publicar}">Pon tu espacio en StayGO</a>
                     </li>
                     <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Protección para anfitriones</a></li>
                     <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Foro de la comunidad</a></li>
