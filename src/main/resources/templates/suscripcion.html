@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayGO - Planes para Anfitriones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        /* Estilo para el switch de mensual/anual */
+        .form-check-input:checked { background-color: #0d6efd; border-color: #0d6efd; }
+        .pricing-toggle { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 40px; }
+        .toggle-label { font-weight: bold; cursor: pointer; }
+        .discount-badge { background-color: #e7f1ff; color: #0d6efd; font-size: 0.8rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; }
+    </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+<div th:replace="~{fragments/layout :: navbar}"></div>
+
+<div class="container py-5 flex-grow-1">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-dark display-5">Aumenta tus ingresos sin pagar comisiones</h1>
+        <p class="text-muted fs-5">Elige el plan que mejor se adapte a ti. Cancela cuando quieras.</p>
+    </div>
+
+    <div class="pricing-toggle">
+        <span class="toggle-label" id="label-monthly">Mensual</span>
+        <div class="form-check form-switch fs-4">
+            <input class="form-check-input" type="checkbox" id="billingToggle" style="cursor: pointer;">
+        </div>
+        <span class="toggle-label text-muted" id="label-yearly">Anual</span>
+        <span class="discount-badge">¡Ahorra un 16%!</span>
+    </div>
+
+    <div class="row justify-content-center g-4 max-w-4xl mx-auto">
+
+        <div class="col-md-5">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 transition-all hover-scale">
+                <div class="card-body d-flex flex-column">
+                    <h4 class="text-muted fw-bold mb-3">Plan Básico</h4>
+                    <p class="text-muted small mb-4">Perfecto para empezar a hospedar y probar la plataforma.</p>
+
+                    <div class="mb-4">
+                        <span class="display-4 fw-bold text-dark">0€</span><span class="text-muted">/mes</span>
+                    </div>
+
+                    <ul class="list-unstyled mb-4 flex-grow-1">
+                        <li class="mb-3"><i class="bi bi-check2 text-success fs-5 me-2"></i> Publica <strong>1 alojamiento</strong></li>
+                        <li class="mb-3"><i class="bi bi-check2 text-success fs-5 me-2"></i> 0% de comisión por reserva</li>
+                        <li class="mb-3"><i class="bi bi-check2 text-success fs-5 me-2"></i> Soporte estándar</li>
+                    </ul>
+
+                    <a th:href="@{/registro}" class="btn btn-outline-dark fw-bold rounded-pill py-2 w-100">Plan Actual</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card h-100 border-primary shadow-lg rounded-4 p-4 position-relative transition-all hover-scale" style="border-width: 2px;">
+                <span class="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-primary px-3 py-2 text-uppercase" style="letter-spacing: 1px;">Recomendado</span>
+
+                <div class="card-body d-flex flex-column mt-2">
+                    <h4 class="text-primary fw-bold mb-3">StayGO Pro <i class="bi bi-stars"></i></h4>
+                    <p class="text-muted small mb-4">Para anfitriones profesionales que quieren maximizar sus reservas.</p>
+
+                    <div class="mb-4">
+                        <span class="display-4 fw-bold text-dark" id="price-value">19,99€</span><span class="text-muted" id="price-period">/mes</span>
+                        <div id="annual-info" class="text-primary small fw-bold mt-1" style="display: none;">(Facturado como 199,99€ al año)</div>
+                    </div>
+
+                    <ul class="list-unstyled mb-4 flex-grow-1">
+                        <li class="mb-3"><i class="bi bi-check-circle-fill text-primary fs-5 me-2"></i> Publica <strong>Alojamientos Ilimitados</strong></li>
+                        <li class="mb-3"><i class="bi bi-check-circle-fill text-primary fs-5 me-2"></i> 0% de comisión por reserva</li>
+                        <li class="mb-3"><i class="bi bi-check-circle-fill text-primary fs-5 me-2"></i> Posicionamiento destacado (Top búsquedas)</li>
+                        <li class="mb-3"><i class="bi bi-check-circle-fill text-primary fs-5 me-2"></i> Soporte prioritario 24/7</li>
+                    </ul>
+
+                    <button type="button" onclick="alert('La pasarela de pago (Stripe) está en fase de desarrollo para la V2. ¡Gracias por tu interés en StayGO Pro!')" class="btn btn-primary fw-bold rounded-pill py-2 w-100 shadow-sm">
+                        Obtener StayGO Pro
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+
+<script>
+    const toggle = document.getElementById('billingToggle');
+    const priceValue = document.getElementById('price-value');
+    const pricePeriod = document.getElementById('price-period');
+    const annualInfo = document.getElementById('annual-info');
+    const labelMonthly = document.getElementById('label-monthly');
+    const labelYearly = document.getElementById('label-yearly');
+
+    toggle.addEventListener('change', function() {
+        if (this.checked) {
+            // Precios ANUALES
+            priceValue.innerText = '16,66€'; // (199.99 / 12 meses)
+            pricePeriod.innerText = '/mes';
+            annualInfo.style.display = 'block';
+            labelYearly.classList.remove('text-muted');
+            labelMonthly.classList.add('text-muted');
+        } else {
+            // Precios MENSUALES
+            priceValue.innerText = '19,99€';
+            pricePeriod.innerText = '/mes';
+            annualInfo.style.display = 'none';
+            labelMonthly.classList.remove('text-muted');
+            labelYearly.classList.add('text-muted');
+        }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

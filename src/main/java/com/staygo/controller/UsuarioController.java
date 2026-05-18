@@ -49,7 +49,7 @@ public class UsuarioController {
         String contrasenaEncriptada = passwordEncoder.encode(pass);
         usuario.setContrasena(contrasenaEncriptada);
 
-        // Guardamos el usuario
+        // Guardar el usuario
         usuarioRepository.save(usuario);
 
         // Redirigimos al login
@@ -85,7 +85,7 @@ public class UsuarioController {
         }
     }
 
-    // --- PERFIL ---
+    // --- Perfil ---
     @GetMapping("/perfil")
     public String mostrarPerfil(HttpSession session) {
         // Comprobamos si hay alguien logueado
@@ -139,5 +139,11 @@ public class UsuarioController {
     public String cerrarSesion(HttpSession session) {
         session.invalidate();
         return "redirect:/";
+    }
+
+    // Mostrar la página Freemium
+    @GetMapping("/premium")
+    public String mostrarPlanesPremium() {
+        return "suscripcion";
     }
 }
