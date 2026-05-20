@@ -57,7 +57,7 @@
                         <i class="bi bi-person-circle fs-4" th:classappend="${session.usuarioLogueado == null ? 'text-secondary' : 'text-primary'}"></i>
                     </div>
 
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2">
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2 overflow-hidden">
                         <th:block th:if="${session.usuarioLogueado == null}">
                             <li><a class="dropdown-item fw-bold py-2" th:href="@{/registro}" th:text="#{nav.registrate}">Regístrate</a></li>
                             <li><a class="dropdown-item py-2" th:href="@{/login}" th:text="#{nav.iniciar_sesion}">Inicia sesión</a></li>
