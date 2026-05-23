@@ -34,23 +34,43 @@ public class Reserva {
     @Column(name = "importe_total")
     private Double precioTotal;
 
-    // NUEVO CAMPO: Estado de la reserva (Vital para la lógica de cancelación)
+    // Estado base en la base de datos
     @Column(nullable = false)
-    private String estado = "CONFIRMADA"; // Valor por defecto al crear una reserva
+    private String estado = "CONFIRMADA";
 
-    // NOTA SENIOR: Si más adelante añades valoraciones (como en tu PDF inicial),
-    // irían aquí:
-    // private String valoracionHuesped;
-    // private String valoracionPropietario;
+    // NOTA: Si más adelante añadimos valoraciones, irían aquí.
 
-    // LÓGICA DE NEGOCIO: ¿Se puede cancelar esta reserva?
+    // ==============================================================
+    // LÓGICA DE NEGOCIO Y MÉTODOS INTELIGENTES
+    // ==============================================================
+
+    /**
+     * Calcula el estado real de la reserva basándose en la fecha de hoy.
+     * Si la fecha de fin ya pasó, la reserva se considera COMPLETADA automáticamente.
+     */
+    public String getEstadoReal() {
+        // 1. Si ya se canceló de forma manual, se queda cancelada
+        if ("CANCELADA".equals(this.estado)) {
+            return "CANCELADA";
+        }
+
+        // 2. Si la fecha de salida ya es anterior al día de hoy -> Completada
+        if (this.fechaFin != null && this.fechaFin.isBefore(LocalDate.now())) {
+            return "COMPLETADA";
+        }
+
+        // 3. Si aún no ha pasado la fecha de salida, sigue confirmada
+        return "CONFIRMADA";
+    }
+
+    /**
+     * Comprueba si la reserva aún se puede cancelar (Faltan más de 2 días)
+     */
     public boolean isCancelable() {
-        // 1. Si ya está cancelada, obvio no se puede volver a cancelar
         if ("CANCELADA".equals(this.estado)) {
             return false;
         }
 
-        // 2. Si faltan 2 días o menos, tampoco se puede
         long diasHastaCheckin = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), this.fechaInicio);
         return diasHastaCheckin > 2;
     }

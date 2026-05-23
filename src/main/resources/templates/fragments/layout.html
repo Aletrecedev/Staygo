@@ -76,6 +76,10 @@
                                 <li><a class="dropdown-item fw-bold py-2" th:href="@{/mis-viajes}"><i class="bi bi-suitcase-lg me-2"></i>Mis Reservas</a></li>
                             </th:block>
 
+                            <th:block th:if="${session.usuarioLogueado.rol == 'ADMIN'}">
+                                <li><a class="dropdown-item fw-bold text-danger py-2 mt-1" th:href="@{/admin/dashboard}"><i class="bi bi-shield-lock me-2"></i>Panel de Control</a></li>
+                            </th:block>
+
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item fw-bold py-2" th:href="@{/perfil}"><i class="bi bi-person me-2"></i>Mi Perfil</a></li>
                         </th:block>
