@@ -21,7 +21,7 @@ public interface ApartamentoRepository extends JpaRepository<Apartamento, Intege
     // Devuelve los apartamentos que pertenecen a un propietario específico
     List<Apartamento> findByPropietario(Usuario propietario);
 
-    // CONSULTA DE BÚSQUEDA (Disponibilidad, Capacidad y Ubicación)
+    // Consulta de Búsqueda (Disponibilidad, Capacidad y Ubicación)
     @Query("SELECT a FROM Apartamento a WHERE a.activo = true " + // <--- Filtro de Soft Delete
             "AND (:ubicacion IS NULL OR a.direccion LIKE %:ubicacion%) " +
             "AND (:huespedes IS NULL OR a.capacidad >= :huespedes) " +

@@ -31,12 +31,12 @@ public class UsuarioController {
     @PostMapping("/registro")
     public String procesarRegistro(@ModelAttribute Usuario usuario) {
 
-        // --- ESCUDO QA 1: Validar si el email ya existe ---
+        // ---QA 1: Validar si el email ya existe ---
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
             return "redirect:/registro?errorEmail=true";
         }
 
-        // --- ESCUDO QA 2: Validar la fuerza de la contraseña ---
+        // --- QA 2: Validar la fuerza de la contraseña ---
         String pass = usuario.getContrasena();
 
         // Si la contraseña es nula, menor a 8 caracteres, o le faltan mayúsculas/números
@@ -56,7 +56,7 @@ public class UsuarioController {
         return "redirect:/login?registroExito=true";
     }
 
-    // --- LOGIN ---
+    // --- Login ---
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
@@ -121,8 +121,7 @@ public class UsuarioController {
         // Control de contraseña: solo la cambiamos si ha escrito algo nuevo
         if (password != null && !password.trim().isEmpty()) {
 
-            // Opcional: Podrías añadir aquí el mismo escudo de contraseña fuerte si quisieras
-            // if (password.length() < 8 ...) { return "redirect:/perfil?errorPassword=true"; }
+            //if (password.length() < 8 ...) { return "redirect:/perfil?errorPassword=true"; }
 
             usuarioLogueado.setContrasena(passwordEncoder.encode(password));
         }

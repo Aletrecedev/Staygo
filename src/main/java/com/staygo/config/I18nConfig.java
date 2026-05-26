@@ -13,15 +13,15 @@ import java.util.Locale;
 @Configuration
 public class I18nConfig implements WebMvcConfigurer {
 
-    // 1. Dónde guardamos el idioma elegido (en la Sesión del usuario)
+    // Dónde guardamos el idioma elegido
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale("es", "ES")); // Español por defecto
+        slr.setDefaultLocale(new Locale("es", "ES"));
         return slr;
     }
 
-    // 2. Cómo detectamos que el usuario quiere cambiar de idioma (?lang=en)
+    // 2. (?lang=en)
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();

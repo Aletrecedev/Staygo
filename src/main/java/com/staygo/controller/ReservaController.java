@@ -41,7 +41,7 @@ public class ReservaController {
             return "redirect:/login";
         }
 
-        // --- ESCUDO: NUNCA CONFIAR EN EL FRONTEND ---
+        // seguridad
         // Si las fechas vienen nulas o vacías (""), abortamos la misión ANTES de que Java explote
         if (fechaInicio == null || fechaInicio.trim().isEmpty() ||
                 fechaFin == null || fechaFin.trim().isEmpty()) {

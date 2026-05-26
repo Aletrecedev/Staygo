@@ -38,11 +38,10 @@ public class Reserva {
     @Column(nullable = false)
     private String estado = "CONFIRMADA";
 
-    // NOTA: Si más adelante añadimos valoraciones, irían aquí.
+    // Nota: Si más adelante se añaden valoraciones, irían aquí.
 
-    // ==============================================================
-    // LÓGICA DE NEGOCIO Y MÉTODOS INTELIGENTES
-    // ==============================================================
+
+    // Lógica de Negocio Y Métodos Inteligentes
 
     /**
      * Calcula el estado real de la reserva basándose en la fecha de hoy.

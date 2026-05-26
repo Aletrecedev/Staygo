@@ -45,17 +45,26 @@
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold small">Nombre</label>
-                    <input type="text" class="form-control p-2" th:field="*{nombre}" required>
+                    <input type="text" class="form-control p-2" th:field="*{nombre}"
+                           minlength="2" maxlength="50"
+                           pattern="[a-zA-ZÀ-ÿ\s]+"
+                           title="El nombre solo puede contener letras y espacios" required>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label fw-bold small">Apellidos</label>
-                    <input type="text" class="form-control p-2" th:field="*{apellidos}" required>
+                    <input type="text" class="form-control p-2" th:field="*{apellidos}"
+                           minlength="2" maxlength="50"
+                           pattern="[a-zA-ZÀ-ÿ\s]+"
+                           title="Los apellidos solo pueden contener letras y espacios" required>
                 </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-bold small">Nombre de Usuario</label>
-                <input type="text" class="form-control p-2" th:field="*{nombreUsuario}" required>
+                <input type="text" class="form-control p-2" th:field="*{nombreUsuario}"
+                       minlength="4" maxlength="20"
+                       pattern="[a-zA-Z0-9_]+"
+                       title="Entre 4 y 20 caracteres. Solo letras, números y guiones bajos (sin espacios)." required>
             </div>
 
             <div class="mb-3">
@@ -70,7 +79,7 @@
 
                     <input type="password" id="passwordInput" class="form-control p-3 bg-light border-0 ps-0" placeholder="Crea una contraseña segura"
                            th:field="*{contrasena}"
-                           minlength="8"
+                           minlength="8" maxlength="64"
                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                            title="Debe contener al menos 8 caracteres, incluyendo al menos una letra mayúscula, una minúscula y un número."
                            required>

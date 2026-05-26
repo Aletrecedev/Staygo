@@ -42,12 +42,12 @@ public class AdminController {
         model.addAttribute("apartamentos", apartamentoRepository.findAll());
         model.addAttribute("reservas", reservaRepository.findAll());
 
-        return "admin-dashboard"; // Nombre de la vista HTML
+        return "admin-dashboard";
     }
 
-    // ==========================================
-    // MÉTODOS DE ACCIÓN PARA LOS BOTONES (POST)
-    // ==========================================
+    //
+    // Métodos de acción para los botones(POST)
+    //
 
     @org.springframework.web.bind.annotation.PostMapping("/usuarios/bloquear/{id}")
     public String bloquearUsuario(@org.springframework.web.bind.annotation.PathVariable Integer id, HttpSession session) {
@@ -56,11 +56,11 @@ public class AdminController {
 
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
         if (usuario != null && !"ADMIN".equals(usuario.getRol())) {
-            // SI YA ESTÁ BLOQUEADO: Lo desbloqueamos devolviéndole el rol CLIENTE
+            // Si ya está bloqueado: Lo desbloqueamos devolviéndole el rol CLIENTE
             if ("BLOQUEADO".equals(usuario.getRol())) {
                 usuario.setRol("CLIENTE");
             } else {
-                // SI NO: Lo bloqueamos
+                // Si no: Lo bloqueamos
                 usuario.setRol("BLOQUEADO");
             }
             usuarioRepository.save(usuario);
@@ -75,11 +75,11 @@ public class AdminController {
 
         com.staygo.model.Apartamento apt = apartamentoRepository.findById(id).orElse(null);
         if (apt != null) {
-            // SI YA ESTÁ OCULTO: Le quitamos la etiqueta para volver a mostrarlo
+            // Si está oculto: Le quitamos la etiqueta para volver a mostrarlo
             if (apt.getNombre().startsWith("[OCULTO] ")) {
                 apt.setNombre(apt.getNombre().replace("[OCULTO] ", ""));
             } else {
-                // SI NO: Lo ocultamos
+                // Si no: Lo ocultamos
                 apt.setNombre("[OCULTO] " + apt.getNombre());
             }
             apartamentoRepository.save(apt);

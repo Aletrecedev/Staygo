@@ -20,10 +20,6 @@ public class ApartamentoService {
         apartamentoRepository.save(apartamento);
     }
 
-    public void borrar(Integer id) {
-        apartamentoRepository.deleteById(id);
-    }
-
     public Apartamento obtenerPorId(Integer id) {
         return apartamentoRepository.findById(id).orElse(null);
     }

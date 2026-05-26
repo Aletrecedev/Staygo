@@ -107,13 +107,13 @@ public class ApartamentoController {
         return "formulario_apartamento";
     }
 
-    // ==========================================
+    //
     // Vistas PÚBLICAS / CLIENTES
-    // ==========================================
+    //
 
     @GetMapping("/explorar")
     public String explorarApartamentos(Model model) {
-        // CAMBIO SENIOR: Solo mostramos lo que está disponible para el público (activo = true)
+        // Cambio: Solo mostramos lo que está disponible para el público (activo = true)
         List<Apartamento> lista = apartamentoRepository.findByActivoTrue();
         model.addAttribute("apartamentos", lista);
         return "explorar";
@@ -133,8 +133,7 @@ public class ApartamentoController {
         LocalDate fechaFin = (fechaFinStr != null && !fechaFinStr.isEmpty())
                 ? LocalDate.parse(fechaFinStr) : null;
 
-        // 2. Ejecutamos nuestra super consulta del repositorio
-        // IMPORTANTE: Asegúrate de que el método en el Repository incluya "AND a.activo = true"
+        // 2. Ejecutamos consulta del repositorio
         List<Apartamento> resultados = apartamentoRepository.buscarDisponibles(ubicacion, fechaInicio, fechaFin, huespedes);
 
         // 3. Enviamos los resultados a la vista
@@ -154,7 +153,7 @@ public class ApartamentoController {
 
         Apartamento apartamento = apartamentoService.obtenerPorId(id);
 
-        // ESCUDO DE SEGURIDAD: Si alguien intenta entrar por URL directa a un piso desactivado (borrado lógicamente)
+        // Seguridad: Si alguien intenta entrar por URL directa a un piso desactivado (borrado lógicamente)
         if (apartamento == null || !apartamento.isActivo()) {
             return "redirect:/explorar";
         }
